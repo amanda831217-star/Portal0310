@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>台灣區域活動頁</title>
+
+  <style>
+    :root{
+      --bg:#f5f8fc;
+      --panel:#ffffff;
+      --line:#d9e6f5;
+      --line-strong:#bfd4ee;
+      --text:#1d2b3a;
+      --text-soft:#5f748b;
+      --primary:#4a90e2;
+      --green:#38b36e;
+      --orange:#d89218;
+      --purple:#8e6dd8;
+      --shadow:0 10px 28px rgba(74,144,226,.10);
+      --shadow-soft:0 8px 18px rgba(31,76,125,.08);
+    }
+
+    *{ box-sizing:border-box; }
+
+    body{
+      margin:0;
+      background:
+        radial-gradient(circle at top left, rgba(108,182,255,.18), transparent 26%),
+        radial-gradient(circle at top right, rgba(74,144,226,.10), transparent 24%),
+        linear-gradient(180deg, #f8fbff 0%, #eef5fc 100%);
+      color:var(--text);
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+      min-height:100vh;
+    }
+
+    a{
+      color:inherit;
+      text-decoration:none;
+    }
+
+    .page{
+      max-width:1460px;
+      margin:0 auto;
+      padding:18px;
+    }
+
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      padding:16px 18px;
+      background:rgba(255,255,255,.86);
+      border:1px solid var(--line);
+      border-radius:24px;
+      box-shadow:var(--shadow-soft);
+      margin-bottom:18px;
+      flex-wrap:wrap;
+    }
+
+    .brand{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+
+    .brand-kicker{
+      color:var(--primary);
+      font-size:13px;
+      font-weight:800;
+      letter-spacing:2px;
+      text-transform:uppercase;
+    }
+
+    .brand-title{
+      font-size:30px;
+      font-weight:900;
+      line-height:1.2;
+    }
+
+    .top-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .btn{
+      appearance:none;
+      border:1px solid var(--line-strong);
+      background:#fff;
+      color:var(--text);
+      border-radius:14px;
+      padding:12px 16px;
+      cursor:pointer;
+      font-size:14px;
+      font-weight:800;
+      transition:.2s ease;
+      box-shadow:0 4px 10px rgba(74,144,226,.05);
+    }
+
+    .btn:hover{
+      transform:translateY(-1px);
+      border-color:#9fc1ea;
+      box-shadow:0 10px 18px rgba(74,144,226,.12);
+    }
+
+    .btn-primary{
+      background:linear-gradient(180deg, #78b9ff, #4a90e2);
+      color:#fff;
+      border-color:#5ca2ef;
+    }
+
+    .hero{
+      display:grid;
+      grid-template-columns: .95fr 1.05fr;
+      gap:18px;
+      margin-bottom:18px;
+    }
+
+    .panel{
+      background:rgba(255,255,255,.94);
+      border:1px solid var(--line);
+      border-radius:24px;
+      box-shadow:var(--shadow-soft);
+      overflow:hidden;
+    }
+
+    .panel-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      padding:18px 20px;
+      border-bottom:1px solid #edf3fa;
+      flex-wrap:wrap;
+    }
+
+    .panel-title{
+      font-size:22px;
+      font-weight:900;
+      line-height:1.2;
+    }
+
+    .panel-subtitle{
+      color:var(--text-soft);
+      font-size:13px;
+      font-weight:700;
+      margin-top:4px;
+    }
+
+    .panel-body{
+      padding:18px;
+    }
+
+    .map-card{
+      min-height:360px;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(120,185,255,.22), transparent 26%),
+        radial-gradient(circle at 80% 30%, rgba(74,144,226,.14), transparent 28%),
+        linear-gradient(180deg, #f8fbff 0%, #eff6fd 100%);
+    }
+
+    .tw-map{
+      display:grid;
+      place-items:center;
+      min-height:320px;
+      padding:14px;
+    }
+
+    .tw-shape{
+      width:min(100%, 420px);
+      aspect-ratio: 0.65 / 1;
+      position:relative;
+      background:linear-gradient(180deg, #cfe7ff 0%, #dff3ea 50%, #f8f3d7 100%);
+      clip-path:polygon(58% 1%, 68% 7%, 74% 16%, 80% 28%, 78% 37%, 83% 46%, 80% 56%, 85% 67%, 79% 77%, 72% 88%, 64% 98%, 52% 100%, 42% 94%, 34% 83%, 29% 71%, 24% 59%, 20% 46%, 23% 36%, 28% 24%, 36% 14%, 46% 6%);
+      border:6px solid rgba(255,255,255,.9);
+      box-shadow:0 18px 28px rgba(74,144,226,.16);
+      overflow:hidden;
+    }
+
+    .zone{
+      position:absolute;
+      border-radius:999px;
+      min-width:74px;
+      min-height:36px;
+      padding:0 14px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:14px;
+      font-weight:900;
+      background:#ffffff;
+      border:1px solid #d9e6f5;
+      box-shadow:0 8px 18px rgba(74,144,226,.12);
+      cursor:pointer;
+      transition:.18s ease;
+      user-select:none;
+    }
+
+    .zone:hover{
+      transform:translateY(-1px);
+    }
+
+    .zone.active{
+      background:linear-gradient(180deg, #78b9ff, #4a90e2);
+      color:#fff;
+      border-color:#5ca2ef;
+    }
+
+    .zone.north{ top:12%; left:55%; }
+    .zone.central{ top:44%; left:34%; }
+    .zone.south{ top:76%; left:30%; }
+    .zone.east{ top:60%; left:62%; }
+    .zone.island{ top:58%; left:2%; }
+    .zone.unknown{ top:88%; left:55%; }
+
+    .region-tabs{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .tab{
+      display:inline-flex;
+      align-items:center;
+      min-height:40px;
+      padding:0 14px;
+      border-radius:999px;
+      border:1px solid #d9e6f5;
+      background:#fff;
+      color:#3b5875;
+      cursor:pointer;
+      font-size:14px;
+      font-weight:900;
+      transition:.18s ease;
+    }
+
+    .tab:hover{
+      border-color:#b7d0ec;
+      transform:translateY(-1px);
+    }
+
+    .tab.active{
+      background:linear-gradient(180deg, #78b9ff, #4a90e2);
+      color:#fff;
+      border-color:#5ca2ef;
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:12px;
+      margin-top:16px;
+    }
+
+    .stat{
+      border:1px solid #e0ebf7;
+      background:linear-gradient(180deg, #ffffff, #f9fbff);
+      border-radius:18px;
+      padding:14px;
+    }
+
+    .stat-label{
+      font-size:12px;
+      color:var(--text-soft);
+      font-weight:800;
+      margin-bottom:6px;
+    }
+
+    .stat-value{
+      font-size:30px;
+      font-weight:900;
+      line-height:1;
+    }
+
+    .status-box{
+      margin-top:14px;
+      min-height:22px;
+      color:var(--text-soft);
+      font-size:14px;
+      font-weight:700;
+      line-height:1.7;
+    }
+
+    .ok-box,
+    .error-box,
+    .loading-box{
+      border-radius:16px;
+      padding:14px;
+      font-size:14px;
+      font-weight:700;
+      line-height:1.8;
+    }
+
+    .ok-box{
+      border:1px solid #cfeedd;
+      background:#eefaf4;
+      color:#28784d;
+    }
+
+    .error-box{
+      border:1px solid #f1c9cf;
+      background:#fff4f5;
+      color:#b64655;
+    }
+
+    .loading-box{
+      border:1px solid #dce9f8;
+      background:#f6fbff;
+      color:#53708d;
+    }
+
+    .event-list{
+      display:grid;
+      gap:12px;
+    }
+
+    .item{
+      border:1px solid #e0ebf7;
+      background:linear-gradient(180deg, #ffffff, #f9fbff);
+      border-radius:18px;
+      padding:14px;
+      display:grid;
+      gap:10px;
+      transition:.18s ease;
+    }
+
+    .item:hover{
+      box-shadow:0 10px 18px rgba(46,93,143,.08);
+      border-color:#cde0f3;
+    }
+
+    .item-top{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:flex-start;
+      flex-wrap:wrap;
+    }
+
+    .item-main{
+      display:flex;
+      gap:10px;
+      flex:1;
+      min-width:0;
+    }
+
+    .dot{
+      width:12px;
+      height:12px;
+      border-radius:999px;
+      margin-top:7px;
+      box-shadow:0 0 0 3px rgba(74,144,226,.10);
+      flex:0 0 auto;
+    }
+
+    .item-title{
+      font-size:20px;
+      font-weight:900;
+      line-height:1.35;
+      color:#223446;
+      word-break:break-word;
+    }
+
+    .item-tags{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:6px;
+    }
+
+    .tag{
+      display:inline-flex;
+      align-items:center;
+      min-height:30px;
+      padding:0 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:900;
+      white-space:nowrap;
+    }
+
+    .tag-blue{ background:#eef6ff; color:#4a90e2; }
+    .tag-green{ background:#e9f9f1; color:#2f9961; }
+    .tag-orange{ background:#fff6e9; color:#d68a10; }
+    .tag-purple{ background:#f3edff; color:#7d58cf; }
+
+    .item-meta{
+      color:#5e7388;
+      font-size:14px;
+      font-weight:700;
+      line-height:1.8;
+      word-break:break-word;
+      white-space:pre-wrap;
+    }
+
+    .item-actions{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
+    @media (max-width: 1120px){
+      .hero{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media (max-width: 760px){
+      .page{
+        padding:12px;
+      }
+
+      .topbar{
+        flex-direction:column;
+        align-items:flex-start;
+      }
+
+      .brand-title{
+        font-size:26px;
+      }
+
+      .panel-head{
+        flex-direction:column;
+        align-items:flex-start;
+      }
+
+      .stats{
+        grid-template-columns:1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="topbar">
+      <div class="brand">
+        <div class="brand-kicker">Taiwan Region View</div>
+        <div class="brand-title">台灣區域活動頁</div>
+      </div>
+
+      <div class="top-actions">
+        <a class="btn" href="./index.html">前台首頁</a>
+        <a class="btn btn-primary" href="./admin.html">後台管理</a>
+      </div>
+    </div>
+
+    <section class="hero">
+      <div class="panel map-card">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">台灣區域地圖</div>
+            <div class="panel-subtitle">點選區域即可篩選對應活動</div>
+          </div>
+        </div>
+
+        <div class="panel-body">
+          <div class="tw-map">
+            <div class="tw-shape">
+              <div class="zone north" data-region="北部">北部</div>
+              <div class="zone central" data-region="中部">中部</div>
+              <div class="zone south" data-region="南部">南部</div>
+              <div class="zone east" data-region="東部">東部</div>
+              <div class="zone island" data-region="離島">離島</div>
+              <div class="zone unknown" data-region="未分類">未分類</div>
+            </div>
+          </div>
+
+          <div class="status-box" id="statusBox">資料初始化中...</div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">區域總覽</div>
+            <div class="panel-subtitle">可依網址參數或手動切換區域</div>
+          </div>
+        </div>
+
+        <div class="panel-body">
+          <div class="region-tabs" id="regionTabs">
+            <button class="tab" data-region="全部">全部</button>
+            <button class="tab" data-region="北部">北部</button>
+            <button class="tab" data-region="中部">中部</button>
+            <button class="tab" data-region="南部">南部</button>
+            <button class="tab" data-region="東部">東部</button>
+            <button class="tab" data-region="離島">離島</button>
+            <button class="tab" data-region="未分類">未分類</button>
+          </div>
+
+          <div class="stats">
+            <div class="stat">
+              <div class="stat-label">目前區域</div>
+              <div class="stat-value" id="statRegion">全部</div>
+            </div>
+            <div class="stat">
+              <div class="stat-label">活動數量</div>
+              <div class="stat-value" id="statCount">0</div>
+            </div>
+            <div class="stat">
+              <div class="stat-label">近期活動</div>
+              <div class="stat-value" id="statUpcoming">0</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <div class="panel-title">區域活動清單</div>
+          <div class="panel-subtitle">顯示目前所選區域活動</div>
+        </div>
+      </div>
+
+      <div class="panel-body">
+        <div class="event-list" id="eventList">
+          <div class="loading-box">活動資料載入中...</div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const API_URL = 'YOUR_GAS_WEBAPP_URL';
+
+    let allEvents = [];
+    let currentRegion = '全部';
+
+    function $(id) {
+      return document.getElementById(id);
+    }
+
+    function safe(v) {
+      return String(v == null ? '' : v).replace(/[&<>"']/g, function(s) {
+        return {
+          '&':'&amp;',
+          '<':'&lt;',
+          '>':'&gt;',
+          '"':'&quot;',
+          "'":'&#39;'
+        }[s];
+      });
+    }
+
+    function safeText(v, fallback = '') {
+      const s = String(v == null ? '' : v).trim();
+      return s || fallback;
+    }
+
+    function jsonp(url, timeoutMs = 12000) {
+      return new Promise((resolve, reject) => {
+        const cbName = 'jsonp_cb_' + Date.now() + '_' + Math.floor(Math.random() * 100000);
+        let done = false;
+        let timer = null;
+        let script = null;
+
+        function cleanup() {
+          if (timer) clearTimeout(timer);
+          if (script && script.parentNode) script.parentNode.removeChild(script);
+          try { delete window[cbName]; } catch (e) { window[cbName] = undefined; }
+        }
+
+        window[cbName] = function(data) {
+          if (done) return;
+          done = true;
+          cleanup();
+          resolve(data);
+        };
+
+        script = document.createElement('script');
+        script.src = url + (url.includes('?') ? '&' : '?') + 'callback=' + cbName;
+        script.async = true;
+
+        script.onerror = function() {
+          if (done) return;
+          done = true;
+          cleanup();
+          reject(new Error('JSONP 載入失敗'));
+        };
+
+        timer = setTimeout(function() {
+          if (done) return;
+          done = true;
+          cleanup();
+          reject(new Error('JSONP 載入逾時'));
+        }, timeoutMs);
+
+        document.body.appendChild(script);
+      });
+    }
+
+    function setStatus(type, text) {
+      const box = $('statusBox');
+      if (type === 'ok') {
+        box.innerHTML = '<div class="ok-box">' + safe(text) + '</div>';
+      } else if (type === 'error') {
+        box.innerHTML = '<div class="error-box">' + safe(text) + '</div>';
+      } else {
+        box.innerHTML = '<div class="loading-box">' + safe(text) + '</div>';
+      }
+    }
+
+    function parseDate(v) {
+      if (!v) return null;
+      const d = new Date(v);
+      return isNaN(d.getTime()) ? null : d;
+    }
+
+    function formatDateTime(v, allDay) {
+      const d = parseDate(v);
+      if (!d) return safeText(v, '未設定');
+
+      if (allDay) {
+        return d.toLocaleDateString('zh-TW', {
+          year:'numeric',
+          month:'2-digit',
+          day:'2-digit',
+          weekday:'short'
+        });
+      }
+
+      return d.toLocaleString('zh-TW', {
+        year:'numeric',
+        month:'2-digit',
+        day:'2-digit',
+        hour:'2-digit',
+        minute:'2-digit',
+        hour12:false
+      });
+    }
+
+    function normalizeEvents(rawEvents) {
+      if (!Array.isArray(rawEvents)) return [];
+
+      return rawEvents.map(function(e) {
+        const p = e && e.extendedProps ? e.extendedProps : {};
+        return {
+          id: safeText(e.id, 'EVT-' + Math.random().toString(36).slice(2)),
+          title: safeText(e.title, '未命名活動'),
+          start: safeText(e.start, ''),
+          end: safeText(e.end, ''),
+          allDay: !!e.allDay,
+          color: safeText(e.color, '#4a90e2'),
+          extendedProps: {
+            location: safeText(p.location, ''),
+            description: safeText(p.description, ''),
+            updateAt: safeText(p.updateAt, ''),
+            eventLink: safeText(p.eventLink, ''),
+            region: safeText(p.region, '未分類')
+          }
+        };
+      });
+    }
+
+    function getColor(e) {
+      const c = safeText(e && e.color, '#4a90e2');
+      return /^#[0-9a-fA-F]{6}$/.test(c) ? c : '#4a90e2';
+    }
+
+    function getQueryRegion() {
+      const params = new URLSearchParams(window.location.search);
+      return safeText(params.get('region'), '全部');
+    }
+
+    function setActiveRegionUI() {
+      document.querySelectorAll('.tab').forEach(function(el) {
+        el.classList.toggle('active', el.getAttribute('data-region') === currentRegion);
+      });
+
+      document.querySelectorAll('.zone').forEach(function(el) {
+        el.classList.toggle('active', el.getAttribute('data-region') === currentRegion);
+      });
+
+      $('statRegion').textContent = currentRegion;
+    }
+
+    function filterByRegion(events) {
+      if (currentRegion === '全部') return events.slice();
+
+      return events.filter(function(e) {
+        const region = safeText(e.extendedProps && e.extendedProps.region, '未分類');
+        return region === currentRegion;
+      });
+    }
+
+    function renderList(events) {
+      const box = $('eventList');
+
+      if (!Array.isArray(events) || !events.length) {
+        box.innerHTML = '<div class="loading-box">此區域目前沒有活動資料。</div>';
+        $('statCount').textContent = 0;
+        $('statUpcoming').textContent = 0;
+        return;
+      }
+
+      const now = new Date();
+      const upcoming = events.filter(function(e) {
+        const d = parseDate(e.start);
+        return d && d >= new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      }).length;
+
+      $('statCount').textContent = events.length;
+      $('statUpcoming').textContent = upcoming;
+
+      box.innerHTML = events.map(function(e) {
+        const location = safeText(e.extendedProps && e.extendedProps.location, '未填地點');
+        const region = safeText(e.extendedProps && e.extendedProps.region, '未分類');
+        const desc = safeText(e.extendedProps && e.extendedProps.description, '未填說明');
+        const eventLink = safeText(e.extendedProps && e.extendedProps.eventLink, '');
+        const color = safe(getColor(e));
+
+        return (
+          '<div class="item">' +
+            '<div class="item-top">' +
+              '<div class="item-main">' +
+                '<div class="dot" style="background:' + color + ';"></div>' +
+                '<div>' +
+                  '<div class="item-title">' + safe(e.title) + '</div>' +
+                  '<div class="item-tags">' +
+                    '<span class="tag tag-blue">' + safe(region) + '</span>' +
+                    '<span class="tag ' + (e.allDay ? 'tag-purple' : 'tag-green') + '">' + (e.allDay ? '全天活動' : '一般活動') + '</span>' +
+                    '<span class="tag tag-orange">' + (eventLink ? '有連結' : '無連結') + '</span>' +
+                  '</div>' +
+                '</div>' +
+              '</div>' +
+            '</div>' +
+
+            '<div class="item-meta">' +
+              safe(formatDateTime(e.start, e.allDay)) + (e.end ? ' → ' + safe(formatDateTime(e.end, e.allDay)) : '') + '\n' +
+              safe(location) + '\n' +
+              safe(desc) +
+            '</div>' +
+
+            '<div class="item-actions">' +
+              '<a class="btn" href="./index.html">查看詳情頁</a>' +
+              (eventLink
+                ? '<a class="btn btn-primary" href="' + safe(eventLink) + '" target="_blank" rel="noopener noreferrer">活動連結</a>'
+                : '') +
+            '</div>' +
+          '</div>'
+        );
+      }).join('');
+    }
+
+    function applyRegion(region) {
+      currentRegion = region || '全部';
+      setActiveRegionUI();
+      const filtered = filterByRegion(allEvents);
+      renderList(filtered);
+
+      setStatus('ok', '目前顯示「' + currentRegion + '」活動，共 ' + filtered.length + ' 筆。');
+    }
+
+    function bindRegionEvents() {
+      document.querySelectorAll('.tab').forEach(function(el) {
+        el.addEventListener('click', function() {
+          const region = el.getAttribute('data-region') || '全部';
+          applyRegion(region);
+          updateUrlRegion(region);
+        });
+      });
+
+      document.querySelectorAll('.zone').forEach(function(el) {
+        el.addEventListener('click', function() {
+          const region = el.getAttribute('data-region') || '全部';
+          applyRegion(region);
+          updateUrlRegion(region);
+        });
+      });
+    }
+
+    function updateUrlRegion(region) {
+      const url = new URL(window.location.href);
+      if (!region || region === '全部') {
+        url.searchParams.delete('region');
+      } else {
+        url.searchParams.set('region', region);
+      }
+      history.replaceState({}, '', url.toString());
+    }
+
+    async function loadEvents() {
+      setStatus('loading', '活動資料讀取中...');
+
+      const data = await jsonp(API_URL + '?action=list');
+
+      if (!data || !data.ok) {
+        throw new Error((data && data.message) ? data.message : 'API 回傳失敗');
+      }
+
+      allEvents = normalizeEvents(data.events || []);
+      allEvents.sort(function(a, b) {
+        const ta = parseDate(a.start) ? parseDate(a.start).getTime() : 0;
+        const tb = parseDate(b.start) ? parseDate(b.start).getTime() : 0;
+        return ta - tb;
+      });
+
+      const queryRegion = getQueryRegion();
+      const allowed = ['全部', '北部', '中部', '南部', '東部', '離島', '未分類'];
+      currentRegion = allowed.includes(queryRegion) ? queryRegion : '全部';
+
+      applyRegion(currentRegion);
+    }
+
+    async function boot() {
+      try {
+        if (!API_URL || API_URL === 'https://script.google.com/macros/s/AKfycbxUz8ob0qV6G7cmGAYwqKvR7UCisLAEsiKv2GKqwKmST7HG1YsO2iTFgSIZIulicIqi/exec') {
+          throw new Error('尚未設定 API_URL，請先把 region.html 裡的 YOUR_GAS_WEBAPP_URL 換成你的 Apps Script 網址。');
+        }
+
+        bindRegionEvents();
+        await loadEvents();
+      } catch (err) {
+        console.error(err);
+        setStatus('error', err && err.message ? err.message : '系統初始化失敗');
+        $('eventList').innerHTML = '<div class="error-box">無法載入區域活動資料，請確認 Apps Script 是否已部署、API_URL 是否正確、Web App 權限是否為任何人。</div>';
+      }
+    }
+
+    boot();
+  </script>
+</body>
+</html>
