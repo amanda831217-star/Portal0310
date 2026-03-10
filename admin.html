@@ -15,15 +15,12 @@
       --text:#1d2b3a;
       --text-soft:#5f748b;
       --primary:#4a90e2;
-      --primary-2:#6cb6ff;
       --green:#38b36e;
       --danger:#d95c68;
       --warn:#d89218;
+      --purple:#8e6dd8;
       --shadow:0 10px 28px rgba(74,144,226,.10);
       --shadow-soft:0 8px 18px rgba(31,76,125,.08);
-      --radius-xl:24px;
-      --radius-lg:18px;
-      --radius-md:14px;
     }
 
     *{ box-sizing:border-box; }
@@ -49,7 +46,7 @@
     }
 
     .page{
-      max-width:1460px;
+      max-width:1480px;
       margin:0 auto;
       padding:18px;
     }
@@ -132,9 +129,15 @@
       border-color:#f2ddb1;
     }
 
+    .btn-purple{
+      background:#f4efff;
+      color:#6d50b8;
+      border-color:#ddd0ff;
+    }
+
     .grid{
       display:grid;
-      grid-template-columns: 450px 1fr;
+      grid-template-columns: 500px 1fr;
       gap:18px;
     }
 
@@ -291,16 +294,56 @@
       transform:translateY(1px);
     }
 
+    .section-card{
+      border:1px solid #e3edf8;
+      background:#f9fbff;
+      border-radius:18px;
+      padding:14px;
+    }
+
+    .section-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      margin-bottom:10px;
+      flex-wrap:wrap;
+    }
+
+    .section-title{
+      font-size:16px;
+      font-weight:900;
+      color:#2e4b68;
+    }
+
+    .links-wrap{
+      display:grid;
+      gap:10px;
+    }
+
+    .link-row{
+      display:grid;
+      grid-template-columns: 1fr 1.4fr auto;
+      gap:10px;
+      align-items:center;
+    }
+
+    .link-row input{
+      width:100%;
+      border:1px solid #d9e6f5;
+      background:#fff;
+      color:var(--text);
+      border-radius:12px;
+      padding:11px 12px;
+      font-size:14px;
+      outline:none;
+    }
+
     .action-row{
       display:flex;
       gap:10px;
       flex-wrap:wrap;
       margin-top:4px;
-    }
-
-    .list-wrap{
-      display:grid;
-      gap:12px;
     }
 
     .toolbar{
@@ -436,7 +479,7 @@
       border:0;
     }
 
-    @media (max-width: 1120px){
+    @media (max-width: 1180px){
       .grid{
         grid-template-columns:1fr;
       }
@@ -462,6 +505,10 @@
       }
 
       .row-2{
+        grid-template-columns:1fr;
+      }
+
+      .link-row{
         grid-template-columns:1fr;
       }
 
@@ -492,7 +539,7 @@
         <div class="panel-head">
           <div>
             <div class="panel-title">活動表單</div>
-            <div class="panel-subtitle">新增、修改、刪除活動資料</div>
+            <div class="panel-subtitle">新增、修改、刪除、多連結管理</div>
           </div>
         </div>
 
@@ -530,8 +577,15 @@
 
             <div class="row-2">
               <div class="field">
-                <label for="location">活動地點</label>
-                <input id="location" type="text" placeholder="例如：南投市文化中心">
+                <label for="eventType">活動類型</label>
+                <select id="eventType">
+                  <option value="一般活動">一般活動</option>
+                  <option value="會議">會議</option>
+                  <option value="教育訓練">教育訓練</option>
+                  <option value="驗收">驗收</option>
+                  <option value="展示">展示</option>
+                  <option value="其他">其他</option>
+                </select>
               </div>
 
               <div class="field">
@@ -549,20 +603,33 @@
             </div>
 
             <div class="field">
+              <label for="location">活動地點</label>
+              <input id="location" type="text" placeholder="例如：南投市文化中心">
+            </div>
+
+            <div class="field">
               <label for="description">活動內容</label>
               <textarea id="description" placeholder="可輸入活動詳細說明"></textarea>
             </div>
 
             <div class="row-2">
               <div class="field">
-                <label for="eventLink">活動連結</label>
-                <input id="eventLink" type="text" placeholder="例如：https://example.com/event">
-              </div>
-
-              <div class="field">
                 <label for="color">活動顏色</label>
                 <input id="color" type="color" value="#4a90e2">
               </div>
+              <div class="field">
+                <label>連結資料儲存</label>
+                <input id="linksJson" type="text" readonly placeholder="系統自動產生">
+              </div>
+            </div>
+
+            <div class="section-card">
+              <div class="section-head">
+                <div class="section-title">活動連結</div>
+                <button class="btn btn-purple" type="button" id="btnAddLink">新增連結</button>
+              </div>
+
+              <div class="links-wrap" id="linksWrap"></div>
             </div>
 
             <div class="action-row">
@@ -586,15 +653,13 @@
         <div class="panel-body">
           <div class="toolbar">
             <div class="search">
-              <input id="searchInput" type="text" placeholder="搜尋活動名稱、地點、區域">
+              <input id="searchInput" type="text" placeholder="搜尋活動名稱、地點、區域、類型">
             </div>
             <div class="count-badge" id="countBadge">共 0 筆</div>
           </div>
 
-          <div class="list-wrap">
-            <div class="event-list" id="eventList">
-              <div class="loading-box">活動資料載入中...</div>
-            </div>
+          <div class="event-list" id="eventList">
+            <div class="loading-box">活動資料載入中...</div>
           </div>
         </div>
       </div>
@@ -608,6 +673,7 @@
 
     let allEvents = [];
     let pendingAction = '';
+    let linkRowSeq = 0;
 
     function $(id) {
       return document.getElementById(id);
@@ -746,8 +812,9 @@
             location: safeText(p.location, ''),
             description: safeText(p.description, ''),
             updateAt: safeText(p.updateAt, ''),
-            eventLink: safeText(p.eventLink, ''),
-            region: safeText(p.region, '未分類')
+            region: safeText(p.region, '未分類'),
+            eventType: safeText(p.eventType, '一般活動'),
+            links: Array.isArray(p.links) ? p.links : []
           }
         };
       });
@@ -758,17 +825,71 @@
       return /^#[0-9a-fA-F]{6}$/.test(c) ? c : '#4a90e2';
     }
 
+    function addLinkRow(data) {
+      const wrap = $('linksWrap');
+      const rowId = 'linkRow_' + (++linkRowSeq);
+
+      const row = document.createElement('div');
+      row.className = 'link-row';
+      row.id = rowId;
+
+      row.innerHTML = `
+        <input type="text" class="link-label" placeholder="連結名稱，例如：報名表" value="${safe(data && data.label || '')}">
+        <input type="text" class="link-url" placeholder="連結網址，例如：https://example.com" value="${safe(data && data.url || '')}">
+        <button class="btn btn-danger" type="button">刪除</button>
+      `;
+
+      row.querySelector('button').addEventListener('click', function() {
+        row.remove();
+        syncLinksJsonField();
+      });
+
+      row.querySelectorAll('input').forEach(function(input) {
+        input.addEventListener('input', syncLinksJsonField);
+      });
+
+      wrap.appendChild(row);
+      syncLinksJsonField();
+    }
+
+    function clearLinkRows() {
+      $('linksWrap').innerHTML = '';
+      syncLinksJsonField();
+    }
+
+    function collectLinks() {
+      const rows = Array.from(document.querySelectorAll('#linksWrap .link-row'));
+      return rows.map(function(row) {
+        const label = safeText(row.querySelector('.link-label')?.value);
+        const url = safeText(row.querySelector('.link-url')?.value);
+
+        if (!label || !url) return null;
+
+        return {
+          label: label,
+          url: /^https?:\/\//i.test(url) ? url : 'https://' + url
+        };
+      }).filter(Boolean);
+    }
+
+    function syncLinksJsonField() {
+      $('linksJson').value = JSON.stringify(collectLinks());
+    }
+
     function resetForm() {
       $('id').value = '';
       $('title').value = '';
       $('start').value = '';
       $('end').value = '';
       $('allDay').checked = false;
+      $('eventType').value = '一般活動';
       $('location').value = '';
       $('region').value = '';
       $('description').value = '';
-      $('eventLink').value = '';
       $('color').value = '#4a90e2';
+      $('linksJson').value = '[]';
+      clearLinkRows();
+      addLinkRow();
       setStatus('ok', '已切換為新增模式。');
     }
 
@@ -778,11 +899,21 @@
       $('start').value = toDatetimeLocalString(e.start);
       $('end').value = toDatetimeLocalString(e.end);
       $('allDay').checked = !!e.allDay;
+      $('eventType').value = safeText(e.extendedProps && e.extendedProps.eventType, '一般活動');
       $('location').value = safeText(e.extendedProps && e.extendedProps.location, '');
       $('region').value = safeText(e.extendedProps && e.extendedProps.region, '');
       $('description').value = safeText(e.extendedProps && e.extendedProps.description, '');
-      $('eventLink').value = safeText(e.extendedProps && e.extendedProps.eventLink, '');
       $('color').value = getColor(e);
+
+      clearLinkRows();
+      const links = Array.isArray(e.extendedProps && e.extendedProps.links) ? e.extendedProps.links : [];
+      if (links.length) {
+        links.forEach(function(link) { addLinkRow(link); });
+      } else {
+        addLinkRow();
+      }
+
+      syncLinksJsonField();
       setStatus('ok', '已帶入活動資料，可直接修改後儲存。');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -839,6 +970,8 @@
     function submitUpsert() {
       if (!validateForm()) return;
 
+      syncLinksJsonField();
+
       const data = {
         action: 'upsert',
         password: safeText($('password').value),
@@ -847,11 +980,12 @@
         start: safeText($('start').value),
         end: safeText($('end').value),
         allDay: $('allDay').checked ? 'true' : 'false',
+        eventType: safeText($('eventType').value, '一般活動'),
         location: safeText($('location').value),
         region: safeText($('region').value),
         description: safeText($('description').value),
         color: safeText($('color').value, '#4a90e2'),
-        eventLink: safeText($('eventLink').value)
+        linksJson: safeText($('linksJson').value, '[]')
       };
 
       const form = createHiddenForm(data);
@@ -940,8 +1074,9 @@
         const location = safeText(e.extendedProps && e.extendedProps.location, '未填地點');
         const region = safeText(e.extendedProps && e.extendedProps.region, '未分類');
         const desc = safeText(e.extendedProps && e.extendedProps.description, '未填說明');
-        const eventLink = safeText(e.extendedProps && e.extendedProps.eventLink, '');
         const updateAt = safeText(e.extendedProps && e.extendedProps.updateAt, '未更新');
+        const eventType = safeText(e.extendedProps && e.extendedProps.eventType, '一般活動');
+        const links = Array.isArray(e.extendedProps && e.extendedProps.links) ? e.extendedProps.links : [];
         const color = safe(getColor(e));
 
         return (
@@ -953,25 +1088,21 @@
                   '<div class="item-title">' + safe(e.title) + '</div>' +
                   '<div class="item-tags">' +
                     '<span class="tag tag-blue">' + safe(region) + '</span>' +
-                    '<span class="tag ' + (e.allDay ? 'tag-purple' : 'tag-green') + '">' + (e.allDay ? '全天活動' : '一般活動') + '</span>' +
-                    '<span class="tag tag-orange">' + (eventLink ? '有連結' : '無連結') + '</span>' +
+                    '<span class="tag tag-purple">' + safe(eventType) + '</span>' +
+                    '<span class="tag ' + (e.allDay ? 'tag-orange' : 'tag-green') + '">' + (e.allDay ? '全天活動' : '一般活動') + '</span>' +
+                    '<span class="tag tag-gray">連結 ' + links.length + ' 筆</span>' +
                   '</div>' +
                 '</div>' +
               '</div>' +
             '</div>' +
-
             '<div class="item-meta">' +
               safe(formatDateTime(e.start, e.allDay)) + (e.end ? ' → ' + safe(formatDateTime(e.end, e.allDay)) : '') + '\n' +
               safe(location) + '\n' +
               safe(desc) + '\n' +
               '最後更新：' + safe(updateAt) +
             '</div>' +
-
             '<div class="item-actions">' +
               '<button class="btn btn-primary" type="button" data-edit="' + safe(e.id) + '">編輯</button>' +
-              (eventLink
-                ? '<a class="btn" href="' + safe(eventLink) + '" target="_blank" rel="noopener noreferrer">開啟連結</a>'
-                : '') +
             '</div>' +
           '</div>'
         );
@@ -996,11 +1127,14 @@
         const location = safeText(e.extendedProps && e.extendedProps.location).toLowerCase();
         const region = safeText(e.extendedProps && e.extendedProps.region).toLowerCase();
         const desc = safeText(e.extendedProps && e.extendedProps.description).toLowerCase();
+        const eventType = safeText(e.extendedProps && e.extendedProps.eventType).toLowerCase();
+
         return (
           title.includes(keyword) ||
           location.includes(keyword) ||
           region.includes(keyword) ||
-          desc.includes(keyword)
+          desc.includes(keyword) ||
+          eventType.includes(keyword)
         );
       });
     }
@@ -1034,16 +1168,15 @@
       });
       $('btnSave').addEventListener('click', submitUpsert);
       $('btnDelete').addEventListener('click', submitDelete);
+      $('btnAddLink').addEventListener('click', function() { addLinkRow(); });
 
       $('searchInput').addEventListener('input', function() {
         renderList(getFilteredEvents());
       });
 
       $('allDay').addEventListener('change', function() {
-        if ($('allDay').checked) {
-          if ($('start').value && !$('end').value) {
-            $('end').value = $('start').value;
-          }
+        if ($('allDay').checked && $('start').value && !$('end').value) {
+          $('end').value = $('start').value;
         }
       });
     }
@@ -1055,6 +1188,7 @@
         }
 
         bindEvents();
+        resetForm();
         await loadEvents();
       } catch (err) {
         console.error(err);
