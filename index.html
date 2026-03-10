@@ -799,7 +799,7 @@
           </div>
 
           <div class="toolbar">
-            <span class="badge" id="StateBadge">系統待載入</span>
+            <span class="badge" id="apiStateBadge">系統待載入</span>
           </div>
         </div>
 
@@ -1349,7 +1349,7 @@
 
     async function boot() {
       try {
-        if (!API_URL || API_URL === 'https://script.google.com/macros/s/AKfycbxUz8ob0qV6G7cmGAYwqKvR7UCisLAEsiKv2GKqwKmST7HG1YsO2iTFgSIZIulicIqi/exec') {
+        if (!API_URL || API_URL === 'YOUR_GAS_WEBAPP_URL') {
           throw new Error('尚未設定 API_URL，請先把 index.html 裡的 YOUR_GAS_WEBAPP_URL 換成你的 Apps Script 網址');
         }
 
