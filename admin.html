@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>活動後台管理</title>
+
+  <style>
+    :root{
+      --bg:#07111f;
+      --bg2:#0b1830;
+      --card:rgba(10,22,45,.82);
+      --line:rgba(90,170,255,.20);
+      --text:#eaf4ff;
+      --muted:#8ea7c2;
+      --glow:#4cc9ff;
+      --danger:#ff6b81;
+    }
+
+    *{box-sizing:border-box}
+
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(76,201,255,.18), transparent 24%),
+        radial-gradient(circle at top right, rgba(111,140,255,.14), transparent 24%),
+        linear-gradient(180deg, #030816 0%, #081427 100%);
+      min-height:100vh;
+    }
+
+    .wrap{
+      max-width:1380px;
+      margin:0 auto;
+      padding:18px;
+    }
+
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      padding:16px 18px;
+      border:1px solid var(--line);
+      border-radius:20px;
+      background:linear-gradient(180deg, rgba(11,24,48,.9), rgba(8,18,36,.78));
+      box-shadow:0 0 28px rgba(76,201,255,.10);
+      margin-bottom:16px;
+      flex-wrap:wrap;
+    }
+
+    .title{
+      font-size:28px;
+      font-weight:900;
+    }
+
+    .btn{
+      appearance:none;
+      border:1px solid rgba(76,201,255,.28);
+      background:rgba(7,18,38,.72);
+      color:var(--text);
+      border-radius:14px;
+      padding:12px 16px;
+      cursor:pointer;
+      font-size:14px;
+      font-weight:800;
+      text-decoration:none;
+    }
+
+    .btn:hover{
+      box-shadow:0 0 22px rgba(76,201,255,.16);
+    }
+
+    .btn-danger{
+      border-color:rgba(255,107,129,.35);
+    }
+
+    .btn-danger:hover{
+      box-shadow:0 0 22px rgba(255,107,129,.16);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 420px 1fr;
+      gap:16px;
+    }
+
+    .panel{
+      border:1px solid var(--line);
+      border-radius:22px;
+      background:linear-gradient(180deg, rgba(10,22,45,.88), rgba(7,16,32,.80));
+      box-shadow:0 0 26px rgba(76,201,255,.08);
+      overflow:hidden;
+    }
+
+    .panel-head{
+      padding:16px 18px;
+      border-bottom:1px solid rgba(76,201,255,.10);
+      font-size:18px;
+      font-weight:900;
+    }
+
+    .form{
+      padding:18px;
+      display:grid;
+      gap:14px;
+    }
+
+    .field{
+      display:grid;
+      gap:8px;
+    }
+
+    .label{
+      color:#81e6ff;
+      font-size:13px;
+      font-weight:800;
+      letter-spacing:1px;
+    }
+
+    input, textarea{
+      width:100%;
+      border:1px solid rgba(76,201,255,.18);
+      background:rgba(255,255,255,.03);
+      color:var(--text);
+      border-radius:14px;
+      padding:12px 14px;
+      font-size:15px;
+      outline:none;
+    }
+
+    textarea{
+      min-height:120px;
+      resize:vertical;
+    }
+
+    input[type="color"]{
+      height:48px;
+      padding:6px;
+    }
+
+    .row{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+
+    .checkbox{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding-top:8px;
+    }
+
+    .checkbox input{
+      width:auto;
+    }
+
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .list{
+      padding:18px;
+      display:grid;
+      gap:10px;
+    }
+
+    .item{
+      border:1px solid rgba(76,201,255,.14);
+      border-radius:16px;
+      padding:14px;
+      background:rgba(255,255,255,.02);
+      display:grid;
+      gap:8px;
+    }
+
+    .item-title{
+      font-size:18px;
+      font-weight:900;
+      line-height:1.4;
+    }
+
+    .item-meta{
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.6;
+      word-break:break-word;
+    }
+
+    .item-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:4px;
+    }
+
+    .status{
+      padding:0 18px 18px;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    iframe{
+      display:none;
+    }
+
+    @media (max-width: 980px){
+      .grid{
+        grid-template-columns:1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="title">活動後台管理</div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <a class="btn" href="./index.html">前台首頁</a>
+        <button class="btn" type="button" onclick="resetForm()">新增模式</button>
+        <button class="btn" type="button" onclick="loadEvents()">重新整理</button>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="panel">
+        <div class="panel-head">表單</div>
+        <div class="form">
+          <div class="field">
+            <div class="label">管理密碼</div>
+            <input id="password" type="password" value="12345678">
+          </div>
+
+          <input id="id" type="hidden">
+
+          <div class="field">
+            <div class="label">活動名稱</div>
+            <input id="title" type="text">
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <div class="label">開始時間</div>
+              <input id="start" type="datetime-local">
+            </div>
+            <div class="field">
+              <div class="label">結束時間</div>
+              <input id="end" type="datetime-local">
+            </div>
+          </div>
+
+          <div class="checkbox">
+            <input id="allDay" type="checkbox">
+            <label for="allDay">全天活動</label>
+          </div>
+
+          <div class="field">
+            <div class="label">地點</div>
+            <input id="location" type="text">
+          </div>
+
+          <div class="field">
+            <div class="label">內容說明</div>
+            <textarea id="description"></textarea>
+          </div>
+
+          <div class="field">
+            <div class="label">顏色</div>
+            <input id="color" type="color" value="#2f7cff">
+          </div>
+
+          <div class="actions">
+            <button class="btn" type="button" onclick="submitUpsert()">儲存</button>
+            <button class="btn btn-danger" type="button" onclick="submitDelete()">刪除</button>
+          </div>
+        </div>
+        <div class="status" id="status">Ready</div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">活動清單</div>
+        <div class="list" id="list"></div>
+      </div>
+    </div>
+  </div>
+
+  <iframe name="hiddenFrame"></iframe>
+
+  <script>
+    const API_URL = 'YOUR_GAS_WEBAPP_URL';
+    let cacheEvents = [];
+
+    function jsonp(url) {
+      return new Promise((resolve, reject) => {
+        const cb = 'jsonp_cb_' + Date.now() + '_' + Math.floor(Math.random() * 100000);
+        window[cb] = function(data) {
+          resolve(data);
+          script.remove();
+          delete window[cb];
+        };
+        const script = document.createElement('script');
+        script.src = url + (url.includes('?') ? '&' : '?') + 'callback=' + cb;
+        script.onerror = function() {
+          reject(new Error('JSONP load error'));
+          script.remove();
+          delete window[cb];
+        };
+        document.body.appendChild(script);
+      });
+    }
+
+    function safe(v) {
+      return String(v || '').replace(/[&<>"']/g, s => ({
+        '&':'&amp;',
+        '<':'&lt;',
+        '>':'&gt;',
+        '"':'&quot;',
+        "'":'&#39;'
+      }[s]));
+    }
+
+    function localInputValue(v) {
+      if (!v) return '';
+      const d = new Date(v);
+      if (isNaN(d)) return '';
+
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      const hh = String(d.getHours()).padStart(2, '0');
+      const mm = String(d.getMinutes()).padStart(2, '0');
+
+      return `${y}-${m}-${day}T${hh}:${mm}`;
+    }
+
+    function setStatus(msg) {
+      document.getElementById('status').textContent = msg;
+    }
+
+    function resetForm() {
+      document.getElementById('id').value = '';
+      document.getElementById('title').value = '';
+      document.getElementById('start').value = '';
+      document.getElementById('end').value = '';
+      document.getElementById('allDay').checked = false;
+      document.getElementById('location').value = '';
+      document.getElementById('description').value = '';
+      document.getElementById('color').value = '#2f7cff';
+      setStatus('新增模式');
+    }
+
+    function fillForm(e) {
+      document.getElementById('id').value = e.id || '';
+      document.getElementById('title').value = e.title || '';
+      document.getElementById('start').value = localInputValue(e.start);
+      document.getElementById('end').value = localInputValue(e.end);
+      document.getElementById('allDay').checked = !!e.allDay;
+      document.getElementById('location').value = (e.extendedProps && e.extendedProps.location) || '';
+      document.getElementById('description').value = (e.extendedProps && e.extendedProps.description) || '';
+      document.getElementById('color').value = e.color || '#2f7cff';
+      setStatus('編輯模式：' + (e.title || ''));
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function createHiddenForm(data) {
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = API_URL;
+      form.target = 'hiddenFrame';
+      form.style.display = 'none';
+
+      Object.keys(data).forEach(key => {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = key;
+        input.value = data[key] == null ? '' : data[key];
+        form.appendChild(input);
+      });
+
+      document.body.appendChild(form);
+      return form;
+    }
+
+    function submitUpsert() {
+      const password = document.getElementById('password').value.trim();
+      const id = document.getElementById('id').value.trim();
+      const title = document.getElementById('title').value.trim();
+      const start = document.getElementById('start').value.trim();
+      const end = document.getElementById('end').value.trim();
+      const allDay = document.getElementById('allDay').checked ? 'true' : 'false';
+      const location = document.getElementById('location').value.trim();
+      const description = document.getElementById('description').value.trim();
+      const color = document.getElementById('color').value.trim();
+
+      if (!password) {
+        setStatus('請輸入管理密碼');
+        return;
+      }
+
+      if (!title || !start) {
+        setStatus('請填寫活動名稱與開始時間');
+        return;
+      }
+
+      const form = createHiddenForm({
+        action: 'upsert',
+        password,
+        id,
+        title,
+        start,
+        end,
+        allDay,
+        location,
+        description,
+        color
+      });
+
+      setStatus('送出中...');
+      form.submit();
+
+      setTimeout(() => {
+        form.remove();
+        setStatus('已送出，重新讀取中...');
+        loadEvents();
+        resetForm();
+      }, 1200);
+    }
+
+    function submitDelete() {
+      const password = document.getElementById('password').value.trim();
+      const id = document.getElementById('id').value.trim();
+
+      if (!password) {
+        setStatus('請輸入管理密碼');
+        return;
+      }
+
+      if (!id) {
+        setStatus('請先選擇要刪除的活動');
+        return;
+      }
+
+      const form = createHiddenForm({
+        action: 'delete',
+        password,
+        id
+      });
+
+      setStatus('刪除中...');
+      form.submit();
+
+      setTimeout(() => {
+        form.remove();
+        setStatus('已刪除，重新讀取中...');
+        loadEvents();
+        resetForm();
+      }, 1200);
+    }
+
+    function sortEvents(events) {
+      return [...events].sort((a, b) => new Date(a.start) - new Date(b.start));
+    }
+
+    async function loadEvents() {
+      setStatus('讀取中...');
+      const data = await jsonp(API_URL + '?action=list');
+      cacheEvents = data.events || [];
+      renderList(sortEvents(cacheEvents));
+      setStatus(`共 ${cacheEvents.length} 筆`);
+    }
+
+    function renderList(events) {
+      const box = document.getElementById('list');
+
+      if (!events.length) {
+        box.innerHTML = '<div style="color:#8ea7c2;">目前沒有活動</div>';
+        return;
+      }
+
+      box.innerHTML = events.map(e => `
+        <div class="item">
+          <div class="item-title">${safe(e.title)}</div>
+          <div class="item-meta">
+            ${safe(e.start || '')}<br>
+            ${safe((e.extendedProps && e.extendedProps.location) || '')}<br>
+            ${safe((e.extendedProps && e.extendedProps.description) || '')}
+          </div>
+          <div class="item-actions">
+            <button class="btn" type="button" data-edit="${safe(e.id)}">編輯</button>
+          </div>
+        </div>
+      `).join('');
+
+      box.querySelectorAll('[data-edit]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.edit;
+          const ev = cacheEvents.find(x => String(x.id) === String(id));
+          if (ev) fillForm(ev);
+        });
+      });
+    }
+
+    loadEvents();
+  </script>
+</body>
+</html>
