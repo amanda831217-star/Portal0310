@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>活動日曆</title>
+  <title>工程活動管理中心</title>
 
   <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.js"></script>
@@ -11,31 +11,54 @@
 
   <style>
     :root{
-      --bg:#07111f;
-      --bg2:#0b1830;
-      --card:rgba(10,22,45,.72);
-      --line:rgba(90,170,255,.20);
-      --text:#eaf4ff;
-      --muted:#8ea7c2;
-      --glow:#4cc9ff;
-      --glow2:#6f8cff;
+      --bg:#f5f8fc;
+      --bg-soft:#eef4fb;
+      --panel:#ffffff;
+      --panel-2:#f9fbfe;
+      --line:#d9e6f5;
+      --line-strong:#bfd4ee;
+      --text:#1d2b3a;
+      --text-soft:#5f748b;
+      --primary:#4a90e2;
+      --primary-2:#6cb6ff;
+      --green:#3cb878;
+      --orange:#f5a623;
+      --purple:#8e6dd8;
+      --danger:#e35d6a;
+      --shadow:0 10px 30px rgba(74,144,226,.10);
+      --shadow-soft:0 8px 18px rgba(31,76,125,.08);
+      --radius-xl:24px;
+      --radius-lg:18px;
+      --radius-md:14px;
     }
 
-    *{box-sizing:border-box}
+    *{
+      box-sizing:border-box;
+    }
 
-    body{
+    html, body{
       margin:0;
-      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
-      color:var(--text);
+      padding:0;
       background:
-        radial-gradient(circle at top left, rgba(76,201,255,.18), transparent 24%),
-        radial-gradient(circle at top right, rgba(111,140,255,.14), transparent 24%),
-        linear-gradient(180deg, #030816 0%, #081427 100%);
+        radial-gradient(circle at top left, rgba(108,182,255,.20), transparent 28%),
+        radial-gradient(circle at top right, rgba(74,144,226,.10), transparent 22%),
+        linear-gradient(180deg, #f8fbff 0%, #eef5fc 100%);
+      color:var(--text);
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
       min-height:100vh;
     }
 
-    .wrap{
-      max-width:1400px;
+    a{
+      color:inherit;
+      text-decoration:none;
+    }
+
+    button{
+      font-family:inherit;
+    }
+
+    .page{
+      max-width:1460px;
       margin:0 auto;
       padding:18px;
     }
@@ -44,14 +67,14 @@
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap:12px;
-      margin-bottom:16px;
+      gap:14px;
       padding:16px 18px;
-      border:1px solid var(--line);
-      border-radius:20px;
-      background:linear-gradient(180deg, rgba(11,24,48,.9), rgba(8,18,36,.78));
-      box-shadow:0 0 0 1px rgba(255,255,255,.02) inset, 0 0 28px rgba(76,201,255,.10);
-      backdrop-filter:blur(16px);
+      background:rgba(255,255,255,.82);
+      border:1px solid rgba(191,212,238,.85);
+      border-radius:24px;
+      box-shadow:var(--shadow-soft);
+      backdrop-filter:blur(10px);
+      margin-bottom:18px;
     }
 
     .brand{
@@ -60,50 +83,194 @@
       gap:6px;
     }
 
-    .brand .t1{
-      font-size:14px;
-      color:#81e6ff;
+    .brand-kicker{
+      font-size:13px;
       letter-spacing:2px;
+      color:var(--primary);
+      font-weight:800;
       text-transform:uppercase;
     }
 
-    .brand .t2{
-      font-size:28px;
-      font-weight:800;
+    .brand-title{
+      font-size:32px;
+      font-weight:900;
       letter-spacing:1px;
+      line-height:1.2;
+    }
+
+    .top-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
     }
 
     .btn{
       appearance:none;
-      border:1px solid rgba(76,201,255,.28);
-      background:rgba(7,18,38,.72);
+      border:1px solid var(--line-strong);
+      background:#fff;
       color:var(--text);
       border-radius:14px;
       padding:12px 16px;
       cursor:pointer;
       font-size:14px;
-      font-weight:700;
-      text-decoration:none;
-      box-shadow:0 0 20px rgba(76,201,255,.08);
+      font-weight:800;
+      transition:.2s ease;
+      box-shadow:0 4px 10px rgba(74,144,226,.05);
     }
 
     .btn:hover{
-      box-shadow:0 0 24px rgba(76,201,255,.18);
-      border-color:rgba(76,201,255,.45);
+      transform:translateY(-1px);
+      border-color:#9fc1ea;
+      box-shadow:0 10px 18px rgba(74,144,226,.12);
+    }
+
+    .btn-primary{
+      background:linear-gradient(180deg, #78b9ff, #4a90e2);
+      color:#fff;
+      border-color:#5ca2ef;
+    }
+
+    .hero{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:18px;
+      margin-bottom:18px;
+    }
+
+    .hero-card{
+      background:linear-gradient(180deg, rgba(255,255,255,.95), rgba(245,249,255,.95));
+      border:1px solid var(--line);
+      border-radius:28px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      min-height:300px;
+    }
+
+    .hero-left{
+      padding:28px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      position:relative;
+    }
+
+    .hero-left::before{
+      content:"";
+      position:absolute;
+      inset:auto -60px -60px auto;
+      width:220px;
+      height:220px;
+      background:radial-gradient(circle, rgba(74,144,226,.12), transparent 70%);
+      pointer-events:none;
+    }
+
+    .hero-content{
+      position:relative;
+      z-index:1;
+    }
+
+    .hero-subtitle{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border-radius:999px;
+      background:#edf6ff;
+      color:var(--primary);
+      font-size:13px;
+      font-weight:800;
+      margin-bottom:14px;
+    }
+
+    .hero-title{
+      font-size:40px;
+      font-weight:900;
+      line-height:1.2;
+      margin-bottom:12px;
+      letter-spacing:.5px;
+    }
+
+    .hero-desc{
+      color:var(--text-soft);
+      font-size:16px;
+      line-height:1.8;
+      max-width:720px;
+      margin-bottom:18px;
+    }
+
+    .hero-stats{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:14px;
+    }
+
+    .stat-pill{
+      padding:12px 14px;
+      border-radius:14px;
+      background:#fff;
+      border:1px solid var(--line);
+      min-width:130px;
+      box-shadow:0 6px 14px rgba(60,91,124,.06);
+    }
+
+    .stat-label{
+      font-size:12px;
+      color:var(--text-soft);
+      margin-bottom:5px;
+      font-weight:700;
+    }
+
+    .stat-value{
+      font-size:28px;
+      font-weight:900;
+      color:var(--text);
+      line-height:1;
+    }
+
+    .hero-photo{
+      position:relative;
+      min-height:300px;
+      overflow:hidden;
+      background:
+        linear-gradient(180deg, rgba(234,242,252,.96), rgba(240,247,255,.96)),
+        linear-gradient(135deg, #d8ebff 0%, #f7fbff 100%);
+    }
+
+    .hero-photo img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .photo-fallback{
+      width:100%;
+      height:100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:#7d97b0;
+      font-size:18px;
+      font-weight:800;
+      background:
+        radial-gradient(circle at center, rgba(74,144,226,.12), transparent 50%),
+        linear-gradient(180deg, #eef6ff, #f9fcff);
     }
 
     .grid{
       display:grid;
-      grid-template-columns: 1.35fr .65fr;
-      gap:16px;
+      grid-template-columns: 1.15fr .85fr;
+      gap:18px;
+      margin-bottom:18px;
     }
 
     .panel{
+      background:rgba(255,255,255,.93);
       border:1px solid var(--line);
-      border-radius:22px;
-      background:linear-gradient(180deg, rgba(10,22,45,.88), rgba(7,16,32,.80));
-      box-shadow:0 0 26px rgba(76,201,255,.08);
-      backdrop-filter:blur(14px);
+      border-radius:24px;
+      box-shadow:var(--shadow-soft);
       overflow:hidden;
     }
 
@@ -111,206 +278,457 @@
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap:8px;
-      padding:16px 18px;
-      border-bottom:1px solid rgba(76,201,255,.10);
+      gap:10px;
+      padding:18px 20px;
+      border-bottom:1px solid #edf3fa;
     }
 
     .panel-title{
-      font-size:18px;
+      font-size:22px;
+      font-weight:900;
+      line-height:1.2;
+    }
+
+    .panel-subtitle{
+      color:var(--text-soft);
+      font-size:13px;
+      font-weight:700;
+      margin-top:4px;
+    }
+
+    .panel-body{
+      padding:18px;
+    }
+
+    .toolbar{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:8px 12px;
+      border-radius:999px;
+      background:#eef6ff;
+      color:#4a90e2;
+      font-size:13px;
       font-weight:800;
     }
 
-    .calendar-box{
-      padding:16px;
+    .status-box{
+      padding:0 18px 18px 18px;
+      color:var(--text-soft);
+      font-size:14px;
+      min-height:20px;
+    }
+
+    .fc-wrap{
+      padding:8px 18px 18px 18px;
     }
 
     #calendar{
-      min-height:760px;
+      min-height:720px;
     }
 
-    .side{
-      display:flex;
-      flex-direction:column;
-      gap:16px;
-    }
-
-    .event-detail{
-      padding:18px;
-      min-height:260px;
-    }
-
-    .empty{
-      color:var(--muted);
-      font-size:15px;
+    .detail-empty{
+      color:var(--text-soft);
       line-height:1.8;
+      font-size:15px;
+      padding:4px 0;
     }
 
-    .event-title{
-      font-size:28px;
+    .detail-title{
+      font-size:30px;
       font-weight:900;
       line-height:1.3;
-      margin-bottom:14px;
-      color:#ffffff;
-      text-shadow:0 0 14px rgba(76,201,255,.14);
+      margin-bottom:16px;
+      color:#203244;
     }
 
-    .meta{
+    .detail-grid{
       display:grid;
       gap:10px;
       margin-bottom:16px;
     }
 
-    .meta-item{
-      border:1px solid rgba(76,201,255,.10);
-      background:rgba(255,255,255,.02);
-      border-radius:14px;
-      padding:12px 14px;
+    .detail-item{
+      background:#f8fbff;
+      border:1px solid #e3edf8;
+      border-radius:16px;
+      padding:14px 15px;
     }
 
-    .meta-label{
-      color:#7ecff8;
+    .detail-label{
       font-size:12px;
+      color:#6690bc;
+      font-weight:800;
       letter-spacing:1px;
       margin-bottom:6px;
     }
 
-    .meta-value{
-      color:var(--text);
-      font-size:16px;
+    .detail-value{
+      font-size:15px;
+      color:#233547;
+      line-height:1.8;
       font-weight:700;
-      line-height:1.6;
       word-break:break-word;
+      white-space:pre-wrap;
     }
 
-    .list-box{
-      padding:18px;
+    .detail-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:12px;
     }
 
-    .list{
+    .link-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      min-height:44px;
+      padding:0 16px;
+      border-radius:14px;
+      background:linear-gradient(180deg, #79bcff, #4a90e2);
+      color:#fff;
+      font-weight:900;
+      border:none;
+      cursor:pointer;
+      box-shadow:0 10px 20px rgba(74,144,226,.20);
+    }
+
+    .link-btn:hover{
+      transform:translateY(-1px);
+    }
+
+    .ghost-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      min-height:44px;
+      padding:0 16px;
+      border-radius:14px;
+      background:#fff;
+      color:#294764;
+      font-weight:900;
+      border:1px solid #d9e6f5;
+      cursor:pointer;
+    }
+
+    .event-list{
       display:flex;
       flex-direction:column;
+      gap:12px;
+    }
+
+    .event-card{
+      border:1px solid #e0ebf7;
+      border-radius:18px;
+      background:linear-gradient(180deg, #ffffff, #f9fbff);
+      padding:14px;
+      display:grid;
+      gap:10px;
+      cursor:pointer;
+      transition:.18s ease;
+    }
+
+    .event-card:hover{
+      transform:translateY(-1px);
+      box-shadow:0 10px 18px rgba(46,93,143,.08);
+      border-color:#cde0f3;
+    }
+
+    .event-top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
       gap:10px;
     }
 
-    .list-item{
-      border:1px solid rgba(76,201,255,.14);
+    .event-color{
+      width:12px;
+      height:12px;
+      border-radius:999px;
+      flex:0 0 auto;
+      margin-top:7px;
+      box-shadow:0 0 0 3px rgba(74,144,226,.10);
+    }
+
+    .event-title{
+      font-size:20px;
+      font-weight:900;
+      line-height:1.35;
+      color:#223446;
+      flex:1;
+    }
+
+    .tag-row{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
+    .tag{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      min-height:30px;
+      padding:0 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:900;
+      white-space:nowrap;
+    }
+
+    .tag-blue{ background:#eef6ff; color:#4a90e2; }
+    .tag-green{ background:#e9f9f1; color:#2f9961; }
+    .tag-orange{ background:#fff6e9; color:#d68a10; }
+    .tag-purple{ background:#f3edff; color:#7d58cf; }
+    .tag-gray{ background:#f1f4f8; color:#6b7d91; }
+
+    .event-meta{
+      color:#5e7388;
+      font-size:14px;
+      line-height:1.8;
+      font-weight:700;
+    }
+
+    .tw-grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+    }
+
+    .region-item{
+      border:1px solid #e0ebf7;
+      background:linear-gradient(180deg, #ffffff, #f7fbff);
+      border-radius:18px;
+      padding:14px;
+      display:grid;
+      gap:8px;
+      cursor:pointer;
+      transition:.18s ease;
+    }
+
+    .region-item:hover{
+      transform:translateY(-1px);
+      box-shadow:0 8px 16px rgba(46,93,143,.08);
+      border-color:#cde0f3;
+    }
+
+    .region-name{
+      font-size:22px;
+      font-weight:900;
+      color:#203244;
+    }
+
+    .region-count{
+      font-size:14px;
+      color:#67809a;
+      font-weight:800;
+    }
+
+    .region-desc{
+      font-size:14px;
+      color:#5e7388;
+      line-height:1.7;
+      font-weight:700;
+    }
+
+    .region-summary{
+      margin-top:12px;
+      border:1px solid #e4edf7;
+      border-radius:18px;
+      background:#f9fbff;
+      padding:14px;
+      color:#5f748b;
+      line-height:1.8;
+      font-size:14px;
+      font-weight:700;
+    }
+
+    .map-note{
+      font-size:13px;
+      color:#6f8498;
+      margin-top:8px;
+      line-height:1.7;
+      font-weight:700;
+    }
+
+    .error-box{
+      border:1px solid #f3c6cd;
+      background:#fff5f6;
+      color:#a24958;
       border-radius:16px;
       padding:14px;
-      background:rgba(255,255,255,.02);
-      cursor:pointer;
-      transition:.2s ease;
-    }
-
-    .list-item:hover{
-      transform:translateY(-1px);
-      box-shadow:0 0 18px rgba(76,201,255,.10);
-      border-color:rgba(76,201,255,.30);
-    }
-
-    .list-title{
-      font-size:18px;
-      font-weight:900;
-      margin-bottom:8px;
-      line-height:1.4;
-    }
-
-    .list-meta{
-      color:var(--muted);
+      line-height:1.8;
       font-size:14px;
-      line-height:1.6;
+      font-weight:700;
     }
 
-    .status{
-      padding:14px 18px;
-      color:var(--muted);
+    .loading-box{
+      border:1px solid #dce9f8;
+      background:#f6fbff;
+      color:#53708d;
+      border-radius:16px;
+      padding:14px;
+      line-height:1.8;
       font-size:14px;
+      font-weight:700;
+    }
+
+    .footer-note{
+      text-align:center;
+      color:#7a8ea3;
+      font-size:13px;
+      padding:4px 10px 18px;
+      font-weight:700;
     }
 
     .fc{
-      --fc-border-color: rgba(76,201,255,.12);
-      --fc-page-bg-color: transparent;
-      --fc-neutral-bg-color: rgba(255,255,255,.02);
-      --fc-list-event-hover-bg-color: rgba(76,201,255,.06);
-      --fc-today-bg-color: rgba(76,201,255,.08);
-      --fc-event-border-color: transparent;
-      --fc-button-bg-color: #0d2345;
-      --fc-button-border-color: rgba(76,201,255,.22);
-      --fc-button-hover-bg-color: #13315e;
-      --fc-button-hover-border-color: rgba(76,201,255,.38);
-      --fc-button-active-bg-color: #163a70;
-      --fc-button-active-border-color: rgba(76,201,255,.42);
-      --fc-event-bg-color: #2f7cff;
-      --fc-event-text-color: #fff;
-      --fc-small-font-size: .88em;
+      --fc-border-color:#e3edf8;
+      --fc-page-bg-color:transparent;
+      --fc-neutral-bg-color:#f8fbff;
+      --fc-list-event-hover-bg-color:#eef6ff;
+      --fc-today-bg-color:#edf6ff;
+      --fc-event-border-color:transparent;
+      --fc-button-bg-color:#ffffff;
+      --fc-button-border-color:#d6e5f5;
+      --fc-button-hover-bg-color:#f5faff;
+      --fc-button-hover-border-color:#bcd4ee;
+      --fc-button-active-bg-color:#edf6ff;
+      --fc-button-active-border-color:#9ec3eb;
+      --fc-event-bg-color:#4a90e2;
+      --fc-event-text-color:#ffffff;
     }
 
     .fc .fc-toolbar-title{
       font-size:28px;
       font-weight:900;
-      color:#fff;
-      letter-spacing:1px;
+      color:#223446;
+      letter-spacing:.5px;
+    }
+
+    .fc .fc-button{
+      color:#294764;
+      font-weight:900;
+      box-shadow:none;
+      border-radius:12px;
+      padding:8px 12px;
     }
 
     .fc .fc-col-header-cell-cushion{
       padding:12px 4px;
-      color:#8bdcff;
       font-size:14px;
-      font-weight:800;
+      color:#6282a3;
+      font-weight:900;
     }
 
     .fc .fc-daygrid-day-number{
-      color:#dcecff;
-      font-size:16px;
-      font-weight:800;
       padding:10px;
+      color:#27415c;
+      font-size:15px;
+      font-weight:900;
     }
 
     .fc .fc-daygrid-event{
-      border-radius:12px;
-      padding:4px 6px;
+      border-radius:10px;
+      padding:3px 6px;
       margin-top:4px;
-      box-shadow:0 0 18px rgba(76,201,255,.16);
+      box-shadow:0 6px 12px rgba(74,144,226,.14);
     }
 
     .fc .fc-event-title{
-      font-size:14px;
+      white-space:normal;
       font-weight:900;
       line-height:1.35;
-      white-space:normal;
+      font-size:13px;
     }
 
     .fc .fc-daygrid-more-link{
-      color:#8bdcff;
-      font-weight:800;
+      font-weight:900;
+      color:#4a90e2;
     }
 
     .fc-theme-standard td,
     .fc-theme-standard th{
-      border-color:rgba(76,201,255,.12);
+      border-color:#e3edf8;
     }
 
-    @media (max-width: 1100px){
+    @media (max-width: 1180px){
+      .hero{
+        grid-template-columns:1fr;
+      }
+
       .grid{
         grid-template-columns:1fr;
       }
 
       #calendar{
-        min-height:640px;
+        min-height:620px;
       }
     }
 
-    @media (max-width: 680px){
+    @media (max-width: 760px){
+      .page{
+        padding:12px;
+      }
+
       .topbar{
         flex-direction:column;
         align-items:flex-start;
       }
 
-      .brand .t2{
-        font-size:22px;
+      .brand-title{
+        font-size:26px;
+      }
+
+      .hero-left{
+        padding:20px;
+      }
+
+      .hero-title{
+        font-size:28px;
+      }
+
+      .hero-desc{
+        font-size:15px;
+      }
+
+      .stat-pill{
+        min-width:unset;
+        flex:1 1 120px;
+      }
+
+      .panel-head{
+        flex-direction:column;
+        align-items:flex-start;
+      }
+
+      .panel-title{
+        font-size:20px;
+      }
+
+      .detail-title{
+        font-size:24px;
+      }
+
+      .event-title{
+        font-size:18px;
+      }
+
+      .tw-grid{
+        grid-template-columns:1fr;
       }
 
       .fc .fc-toolbar{
+        display:flex;
         flex-direction:column;
         gap:10px;
       }
@@ -318,94 +736,247 @@
       .fc .fc-toolbar-title{
         font-size:22px;
       }
-
-      .event-title{
-        font-size:22px;
-      }
     }
   </style>
 </head>
 <body>
-  <div class="wrap">
+  <div class="page">
     <div class="topbar">
       <div class="brand">
-        <div class="t1">Engineering Event Center</div>
-        <div class="t2">活動日曆</div>
+        <div class="brand-kicker">Engineering Event Center</div>
+        <div class="brand-title">工程活動管理中心</div>
       </div>
-      <a class="btn" href="./admin.html">後台管理</a>
+
+      <div class="top-actions">
+        <a class="btn" href="./region.html">台灣區域頁</a>
+        <a class="btn btn-primary" href="./admin.html">後台管理</a>
+      </div>
     </div>
 
-    <div class="grid">
+    <section class="hero">
+      <div class="hero-card hero-left">
+        <div class="hero-content">
+          <div class="hero-subtitle">活動總覽 / 日曆 / 區域分布</div>
+          <div class="hero-title">活動一進頁面就看得清楚</div>
+          <div class="hero-desc">
+            這個頁面整合活動日曆、近期活動、活動詳情與台灣區域分布。
+            活動如果在南投，系統可歸類顯示為中部；若有活動連結，也可直接點進去查看。
+          </div>
+
+          <div class="hero-stats">
+            <div class="stat-pill">
+              <div class="stat-label">本月活動</div>
+              <div class="stat-value" id="statMonthCount">0</div>
+            </div>
+            <div class="stat-pill">
+              <div class="stat-label">近期活動</div>
+              <div class="stat-value" id="statUpcomingCount">0</div>
+            </div>
+            <div class="stat-pill">
+              <div class="stat-label">區域數量</div>
+              <div class="stat-value" id="statRegionCount">0</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-card hero-photo" id="heroPhotoWrap">
+        <img
+          id="heroPhoto"
+          src="./assets/hero.jpg"
+          alt="首頁活動主視覺"
+          onerror="window.handleHeroFallback && window.handleHeroFallback()"
+        />
+      </div>
+    </section>
+
+    <section class="grid">
       <div class="panel">
         <div class="panel-head">
-          <div class="panel-title">Calendar</div>
+          <div>
+            <div class="panel-title">活動日曆</div>
+            <div class="panel-subtitle">支援月曆、週曆、列表檢視</div>
+          </div>
+
+          <div class="toolbar">
+            <span class="badge" id="apiStateBadge">系統待載入</span>
+          </div>
         </div>
-        <div class="calendar-box">
+
+        <div class="status-box" id="statusBox">正在初始化...</div>
+
+        <div class="fc-wrap">
           <div id="calendar"></div>
         </div>
-        <div class="status" id="status">Loading...</div>
       </div>
 
-      <div class="side">
+      <div style="display:grid; gap:18px;">
         <div class="panel">
           <div class="panel-head">
-            <div class="panel-title">活動內容</div>
+            <div>
+              <div class="panel-title">活動內容</div>
+              <div class="panel-subtitle">點日曆、點近期活動都可看詳細內容</div>
+            </div>
           </div>
-          <div class="event-detail" id="detail">
-            <div class="empty">請點選日期或活動</div>
+
+          <div class="panel-body" id="detailBox">
+            <div class="detail-empty">請點選活動或日期。</div>
           </div>
         </div>
 
         <div class="panel">
           <div class="panel-head">
-            <div class="panel-title">近期活動</div>
+            <div>
+              <div class="panel-title">近期活動</div>
+              <div class="panel-subtitle">最近 8 筆可直接點選</div>
+            </div>
           </div>
-          <div class="list-box">
-            <div class="list" id="upcomingList"></div>
+
+          <div class="panel-body">
+            <div class="event-list" id="upcomingList">
+              <div class="loading-box">活動載入中...</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title">台灣區域概覽</div>
+              <div class="panel-subtitle">依活動地點自動顯示區域</div>
+            </div>
+          </div>
+
+          <div class="panel-body">
+            <div class="tw-grid" id="regionSummaryGrid">
+              <div class="loading-box">區域統計載入中...</div>
+            </div>
+            <div class="region-summary" id="regionSummaryText">
+              系統整理中...
+            </div>
+            <div class="map-note">
+              若活動地點含「南投、台中、彰化」等文字，系統可自動歸類至中部；
+              若你在後台已手動指定區域，則以後台設定為主。
+            </div>
           </div>
         </div>
       </div>
+    </section>
+
+    <div class="footer-note">
+      建議將首頁照片放在 GitHub 專案路徑：<strong>/assets/hero.jpg</strong>
     </div>
   </div>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbxUz8ob0qV6G7cmGAYwqKvR7UCisLAEsiKv2GKqwKmST7HG1YsO2iTFgSIZIulicIqi/exec';
-    let calendar;
+    const API_URL = 'YOUR_GAS_WEBAPP_URL';
+
+    let calendar = null;
     let allEvents = [];
 
-    function jsonp(url) {
+    function $(id) {
+      return document.getElementById(id);
+    }
+
+    function safe(v) {
+      return String(v == null ? '' : v).replace(/[&<>"']/g, function(s) {
+        return {
+          '&':'&amp;',
+          '<':'&lt;',
+          '>':'&gt;',
+          '"':'&quot;',
+          "'":'&#39;'
+        }[s];
+      });
+    }
+
+    function safeText(v, fallback = '') {
+      const s = String(v == null ? '' : v).trim();
+      return s || fallback;
+    }
+
+    function jsonp(url, timeoutMs = 12000) {
       return new Promise((resolve, reject) => {
-        const cb = 'jsonp_cb_' + Date.now() + '_' + Math.floor(Math.random() * 100000);
-        window[cb] = function(data) {
+        const cbName = 'jsonp_cb_' + Date.now() + '_' + Math.floor(Math.random() * 100000);
+        let done = false;
+        let timer = null;
+        let script = null;
+
+        function cleanup() {
+          if (timer) clearTimeout(timer);
+          if (script && script.parentNode) script.parentNode.removeChild(script);
+          try { delete window[cbName]; } catch (e) { window[cbName] = undefined; }
+        }
+
+        window[cbName] = function(data) {
+          if (done) return;
+          done = true;
+          cleanup();
           resolve(data);
-          script.remove();
-          delete window[cb];
         };
-        const script = document.createElement('script');
-        script.src = url + (url.includes('?') ? '&' : '?') + 'callback=' + cb;
+
+        script = document.createElement('script');
+        script.src = url + (url.includes('?') ? '&' : '?') + 'callback=' + cbName;
+        script.async = true;
+
         script.onerror = function() {
-          reject(new Error('JSONP load error'));
-          script.remove();
-          delete window[cb];
+          if (done) return;
+          done = true;
+          cleanup();
+          reject(new Error('JSONP 載入失敗'));
         };
+
+        timer = setTimeout(function() {
+          if (done) return;
+          done = true;
+          cleanup();
+          reject(new Error('JSONP 載入逾時'));
+        }, timeoutMs);
+
         document.body.appendChild(script);
       });
     }
 
-    function safe(v) {
-      return String(v || '').replace(/[&<>"']/g, s => ({
-        '&':'&amp;',
-        '<':'&lt;',
-        '>':'&gt;',
-        '"':'&quot;',
-        "'":'&#39;'
-      }[s]));
+    function setStatus(text, isError = false) {
+      $('statusBox').innerHTML = isError
+        ? '<div class="error-box">' + safe(text) + '</div>'
+        : safe(text);
     }
 
-    function fmtDate(v, allDay) {
-      if (!v) return '';
+    function setApiBadge(text, type) {
+      const el = $('apiStateBadge');
+      el.textContent = text;
+      el.style.background = '#eef6ff';
+      el.style.color = '#4a90e2';
+
+      if (type === 'ok') {
+        el.style.background = '#e9f9f1';
+        el.style.color = '#2f9961';
+      } else if (type === 'error') {
+        el.style.background = '#fff3f5';
+        el.style.color = '#c25163';
+      } else if (type === 'warn') {
+        el.style.background = '#fff7eb';
+        el.style.color = '#d28713';
+      }
+    }
+
+    function handleHeroFallback() {
+      const wrap = $('heroPhotoWrap');
+      wrap.innerHTML = '<div class="photo-fallback">首頁照片載入失敗，請將圖片放到 /assets/hero.jpg</div>';
+    }
+
+    window.handleHeroFallback = handleHeroFallback;
+
+    function parseDate(v) {
+      if (!v) return null;
       const d = new Date(v);
-      if (isNaN(d)) return String(v);
+      return isNaN(d.getTime()) ? null : d;
+    }
+
+    function formatDateTime(v, allDay) {
+      const d = parseDate(v);
+      if (!d) return safeText(v, '未設定');
 
       if (allDay) {
         return d.toLocaleDateString('zh-TW', {
@@ -426,96 +997,302 @@
       });
     }
 
-    function showDetail(eventObj) {
-      const p = eventObj.extendedProps || {};
-
-      document.getElementById('detail').innerHTML = `
-        <div class="event-title">${safe(eventObj.title || '')}</div>
-        <div class="meta">
-          <div class="meta-item">
-            <div class="meta-label">開始</div>
-            <div class="meta-value">${safe(fmtDate(eventObj.start, eventObj.allDay))}</div>
-          </div>
-          <div class="meta-item">
-            <div class="meta-label">結束</div>
-            <div class="meta-value">${safe(eventObj.end ? fmtDate(eventObj.end, eventObj.allDay) : '')}</div>
-          </div>
-          <div class="meta-item">
-            <div class="meta-label">地點</div>
-            <div class="meta-value">${safe(p.location || '')}</div>
-          </div>
-          <div class="meta-item">
-            <div class="meta-label">內容</div>
-            <div class="meta-value">${safe(p.description || '')}</div>
-          </div>
-          <div class="meta-item">
-            <div class="meta-label">更新時間</div>
-            <div class="meta-value">${safe(p.updateAt || '')}</div>
-          </div>
-        </div>
-      `;
+    function getRegionFromEvent(e) {
+      const p = (e && e.extendedProps) ? e.extendedProps : {};
+      return safeText(p.region, '未分類');
     }
 
-    function renderUpcoming(events) {
-      const now = new Date();
+    function getLocationFromEvent(e) {
+      const p = (e && e.extendedProps) ? e.extendedProps : {};
+      return safeText(p.location, '未填地點');
+    }
 
-      const sorted = [...events]
-        .filter(e => {
-          const s = new Date(e.start);
-          return !isNaN(s) && s >= new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
-        })
-        .sort((a, b) => new Date(a.start) - new Date(b.start))
-        .slice(0, 8);
+    function getDescriptionFromEvent(e) {
+      const p = (e && e.extendedProps) ? e.extendedProps : {};
+      return safeText(p.description, '未填說明');
+    }
 
-      const box = document.getElementById('upcomingList');
+    function getUpdateAtFromEvent(e) {
+      const p = (e && e.extendedProps) ? e.extendedProps : {};
+      return safeText(p.updateAt, '未更新');
+    }
 
-      if (!sorted.length) {
-        box.innerHTML = '<div class="empty">目前沒有活動</div>';
+    function getEventLinkFromEvent(e) {
+      const p = (e && e.extendedProps) ? e.extendedProps : {};
+      return safeText(p.eventLink, '');
+    }
+
+    function getColorFromEvent(e) {
+      const c = safeText(e && e.backgroundColor ? e.backgroundColor : e && e.color ? e.color : '', '#4a90e2');
+      return /^#[0-9a-fA-F]{6}$/.test(c) ? c : '#4a90e2';
+    }
+
+    function showDetail(eventObj) {
+      if (!eventObj) {
+        $('detailBox').innerHTML = '<div class="detail-empty">查無活動內容。</div>';
         return;
       }
 
-      box.innerHTML = sorted.map(e => `
-        <div class="list-item" data-id="${safe(e.id)}">
-          <div class="list-title">${safe(e.title)}</div>
-          <div class="list-meta">
-            ${safe(fmtDate(e.start, e.allDay))}<br>
-            ${safe((e.extendedProps && e.extendedProps.location) || '')}
-          </div>
-        </div>
-      `).join('');
+      const title = safeText(eventObj.title, '未命名活動');
+      const startText = formatDateTime(eventObj.start, eventObj.allDay);
+      const endText = eventObj.end ? formatDateTime(eventObj.end, eventObj.allDay) : '未設定';
+      const location = getLocationFromEvent(eventObj);
+      const desc = getDescriptionFromEvent(eventObj);
+      const updateAt = getUpdateAtFromEvent(eventObj);
+      const region = getRegionFromEvent(eventObj);
+      const eventLink = getEventLinkFromEvent(eventObj);
 
-      box.querySelectorAll('.list-item').forEach(el => {
-        el.addEventListener('click', () => {
-          const id = el.dataset.id;
+      const actionsHtml = eventLink
+        ? '<div class="detail-actions">' +
+            '<a class="link-btn" href="' + safe(eventLink) + '" target="_blank" rel="noopener noreferrer">前往活動連結</a>' +
+            '<button class="ghost-btn" type="button" onclick="copyLink(\'' + safe(eventLink).replace(/'/g, '&#39;') + '\')">複製連結</button>' +
+          '</div>'
+        : '<div class="detail-actions">' +
+            '<button class="ghost-btn" type="button" disabled style="opacity:.55; cursor:not-allowed;">未設定活動連結</button>' +
+          '</div>';
+
+      $('detailBox').innerHTML =
+        '<div class="detail-title">' + safe(title) + '</div>' +
+        '<div class="detail-grid">' +
+          '<div class="detail-item"><div class="detail-label">開始時間</div><div class="detail-value">' + safe(startText) + '</div></div>' +
+          '<div class="detail-item"><div class="detail-label">結束時間</div><div class="detail-value">' + safe(endText) + '</div></div>' +
+          '<div class="detail-item"><div class="detail-label">活動地點</div><div class="detail-value">' + safe(location) + '</div></div>' +
+          '<div class="detail-item"><div class="detail-label">活動區域</div><div class="detail-value">' + safe(region) + '</div></div>' +
+          '<div class="detail-item"><div class="detail-label">活動內容</div><div class="detail-value">' + safe(desc) + '</div></div>' +
+          '<div class="detail-item"><div class="detail-label">最後更新</div><div class="detail-value">' + safe(updateAt) + '</div></div>' +
+        '</div>' +
+        actionsHtml;
+    }
+
+    async function copyLink(link) {
+      try {
+        if (!link) return;
+        await navigator.clipboard.writeText(link);
+        alert('連結已複製');
+      } catch (err) {
+        alert('無法直接複製，請手動複製連結');
+      }
+    }
+
+    function buildTagHtml(region, allDay) {
+      return (
+        '<div class="tag-row">' +
+          '<span class="tag tag-blue">' + safe(region || '未分類') + '</span>' +
+          '<span class="tag ' + (allDay ? 'tag-purple' : 'tag-green') + '">' + (allDay ? '全天活動' : '一般活動') + '</span>' +
+        '</div>'
+      );
+    }
+
+    function renderUpcoming(events) {
+      const box = $('upcomingList');
+
+      if (!Array.isArray(events) || !events.length) {
+        box.innerHTML = '<div class="loading-box">目前沒有活動資料。</div>';
+        return;
+      }
+
+      const now = new Date();
+      const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+      const sorted = events
+        .filter(e => {
+          const d = parseDate(e.start);
+          return d ? d >= new Date(startOfToday.getTime() - 86400000) : false;
+        })
+        .sort((a, b) => {
+          const ta = parseDate(a.start) ? parseDate(a.start).getTime() : 0;
+          const tb = parseDate(b.start) ? parseDate(b.start).getTime() : 0;
+          return ta - tb;
+        })
+        .slice(0, 8);
+
+      if (!sorted.length) {
+        box.innerHTML = '<div class="loading-box">目前沒有近期活動。</div>';
+        return;
+      }
+
+      box.innerHTML = sorted.map(function(e) {
+        const location = safeText(e.extendedProps && e.extendedProps.location, '未填地點');
+        const region = safeText(e.extendedProps && e.extendedProps.region, '未分類');
+        const color = safe(getColorFromEvent(e));
+        const timeText = safe(formatDateTime(e.start, e.allDay));
+        const title = safeText(e.title, '未命名活動');
+
+        return (
+          '<div class="event-card" data-id="' + safe(e.id) + '">' +
+            '<div class="event-top">' +
+              '<div class="event-color" style="background:' + color + ';"></div>' +
+              '<div class="event-title">' + safe(title) + '</div>' +
+            '</div>' +
+            buildTagHtml(region, !!e.allDay) +
+            '<div class="event-meta">' +
+              safe(timeText) + '<br>' +
+              safe(location) +
+            '</div>' +
+          '</div>'
+        );
+      }).join('');
+
+      box.querySelectorAll('.event-card').forEach(function(el) {
+        el.addEventListener('click', function() {
+          const id = el.getAttribute('data-id');
+          if (!calendar) return;
           const fcEvent = calendar.getEventById(id);
-          if (fcEvent) {
-            showDetail(fcEvent);
+          if (!fcEvent) return;
+          showDetail(fcEvent);
+          if (fcEvent.start) {
             calendar.gotoDate(fcEvent.start);
           }
         });
       });
     }
 
+    function renderRegionSummary(events) {
+      const grid = $('regionSummaryGrid');
+      const text = $('regionSummaryText');
+
+      if (!Array.isArray(events) || !events.length) {
+        grid.innerHTML = '<div class="loading-box">目前沒有區域資料。</div>';
+        text.textContent = '目前沒有活動，因此無法統計區域分布。';
+        return;
+      }
+
+      const counts = {
+        '北部': 0,
+        '中部': 0,
+        '南部': 0,
+        '東部': 0,
+        '離島': 0,
+        '未分類': 0
+      };
+
+      events.forEach(function(e) {
+        const region = safeText(e.extendedProps && e.extendedProps.region, '未分類');
+        if (counts[region] == null) counts['未分類'] += 1;
+        else counts[region] += 1;
+      });
+
+      const regionInfo = [
+        ['北部', '台北 / 新北 / 基隆 / 桃園 / 新竹 / 宜蘭'],
+        ['中部', '苗栗 / 台中 / 彰化 / 南投 / 雲林'],
+        ['南部', '嘉義 / 台南 / 高雄 / 屏東'],
+        ['東部', '花蓮 / 台東'],
+        ['離島', '澎湖 / 金門 / 馬祖'],
+        ['未分類', '尚未對應到區域']
+      ];
+
+      grid.innerHTML = regionInfo.map(function(item) {
+        const region = item[0];
+        const desc = item[1];
+        return (
+          '<div class="region-item" data-region="' + safe(region) + '">' +
+            '<div class="region-name">' + safe(region) + '</div>' +
+            '<div class="region-count">活動數量：' + safe(counts[region]) + '</div>' +
+            '<div class="region-desc">' + safe(desc) + '</div>' +
+          '</div>'
+        );
+      }).join('');
+
+      const topRegion = Object.entries(counts).sort(function(a, b) {
+        return b[1] - a[1];
+      })[0];
+
+      text.textContent = '目前活動最多的區域為「' + topRegion[0] + '」，共有 ' + topRegion[1] + ' 筆活動。你也可以進入台灣區域頁看更完整的區域活動列表。';
+
+      grid.querySelectorAll('.region-item').forEach(function(el) {
+        el.addEventListener('click', function() {
+          const region = el.getAttribute('data-region') || '';
+          window.location.href = './region.html?region=' + encodeURIComponent(region);
+        });
+      });
+
+      $('statRegionCount').textContent = Object.values(counts).filter(function(v) { return v > 0; }).length;
+    }
+
+    function updateHeroStats(events) {
+      if (!Array.isArray(events)) events = [];
+
+      const now = new Date();
+      const y = now.getFullYear();
+      const m = now.getMonth();
+
+      const monthCount = events.filter(function(e) {
+        const d = parseDate(e.start);
+        return d && d.getFullYear() === y && d.getMonth() === m;
+      }).length;
+
+      const upcomingCount = events.filter(function(e) {
+        const d = parseDate(e.start);
+        return d && d >= new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      }).length;
+
+      $('statMonthCount').textContent = monthCount;
+      $('statUpcomingCount').textContent = upcomingCount;
+    }
+
+    function normalizeEvents(rawEvents) {
+      if (!Array.isArray(rawEvents)) return [];
+
+      return rawEvents.map(function(e) {
+        const p = e && e.extendedProps ? e.extendedProps : {};
+        return {
+          id: safeText(e.id, 'EVT-' + Math.random().toString(36).slice(2)),
+          title: safeText(e.title, '未命名活動'),
+          start: safeText(e.start, ''),
+          end: safeText(e.end, ''),
+          allDay: !!e.allDay,
+          color: safeText(e.color, '#4a90e2'),
+          extendedProps: {
+            location: safeText(p.location, ''),
+            description: safeText(p.description, ''),
+            updateAt: safeText(p.updateAt, ''),
+            eventLink: safeText(p.eventLink, ''),
+            region: safeText(p.region, '未分類')
+          }
+        };
+      });
+    }
+
+    function renderErrorFallback(message) {
+      setStatus(message || '活動資料讀取失敗', true);
+      setApiBadge('API 連線失敗', 'error');
+
+      $('upcomingList').innerHTML =
+        '<div class="error-box">無法載入近期活動，請確認 Apps Script 是否已重新部署、API_URL 是否正確、Web App 權限是否為任何人。</div>';
+
+      $('detailBox').innerHTML =
+        '<div class="error-box">目前無法顯示活動詳情，請先排除 API 問題。</div>';
+
+      $('regionSummaryGrid').innerHTML =
+        '<div class="error-box">無法載入區域統計。</div>';
+
+      $('regionSummaryText').textContent = '目前無法取得活動資料。';
+    }
+
     async function loadEvents() {
-      document.getElementById('status').textContent = 'Loading...';
+      setStatus('活動資料讀取中...');
+      setApiBadge('資料載入中', 'warn');
 
       const data = await jsonp(API_URL + '?action=list');
 
-      if (!data.ok) {
-        document.getElementById('status').textContent = 'Load failed';
-        return [];
+      if (!data || !data.ok) {
+        throw new Error((data && data.message) ? data.message : 'API 回傳失敗');
       }
 
-      allEvents = data.events || [];
-      document.getElementById('status').textContent = `Events: ${allEvents.length}`;
+      allEvents = normalizeEvents(data.events || []);
+
+      setApiBadge('API 正常', 'ok');
+      setStatus('活動資料已載入，共 ' + allEvents.length + ' 筆。');
+
+      updateHeroStats(allEvents);
       renderUpcoming(allEvents);
+      renderRegionSummary(allEvents);
+
       return allEvents;
     }
 
-    async function initCalendar() {
-      const events = await loadEvents();
-
-      const calendarEl = document.getElementById('calendar');
+    function initCalendar(events) {
+      const calendarEl = $('calendar');
 
       calendar = new FullCalendar.Calendar(calendarEl, {
         locale: 'zh-tw',
@@ -535,35 +1312,56 @@
         dayMaxEvents: 3,
         navLinks: true,
         events: events,
-        eventClick(info) {
+        eventClick: function(info) {
           info.jsEvent.preventDefault();
           showDetail(info.event);
         },
-        dateClick(info) {
-          const eventsOnDate = calendar.getEvents().filter(e => {
-            const s = new Date(e.start);
-            return s.getFullYear() === info.date.getFullYear()
-              && s.getMonth() === info.date.getMonth()
-              && s.getDate() === info.date.getDate();
+        dateClick: function(info) {
+          if (!calendar) return;
+
+          const eventsOnDate = calendar.getEvents().filter(function(e) {
+            const d = parseDate(e.start);
+            if (!d) return false;
+            return d.getFullYear() === info.date.getFullYear() &&
+                   d.getMonth() === info.date.getMonth() &&
+                   d.getDate() === info.date.getDate();
           });
 
           if (eventsOnDate.length) {
             showDetail(eventsOnDate[0]);
           } else {
-            document.getElementById('detail').innerHTML = '<div class="empty">當日無活動</div>';
+            $('detailBox').innerHTML =
+              '<div class="detail-empty">此日期目前沒有活動。</div>';
           }
         }
       });
 
       calendar.render();
 
-      if (events.length) {
-        const first = calendar.getEvents()[0];
-        if (first) showDetail(first);
+      const first = calendar.getEvents()[0];
+      if (first) {
+        showDetail(first);
+      } else {
+        $('detailBox').innerHTML =
+          '<div class="detail-empty">目前尚未建立任何活動。</div>';
       }
     }
 
-    initCalendar();
+    async function boot() {
+      try {
+        if (!API_URL || API_URL === 'https://script.google.com/macros/s/AKfycbxUz8ob0qV6G7cmGAYwqKvR7UCisLAEsiKv2GKqwKmST7HG1YsO2iTFgSIZIulicIqi/exec') {
+          throw new Error('尚未設定 API_URL，請先把 index.html 裡的 YOUR_GAS_WEBAPP_URL 換成你的 Apps Script 網址');
+        }
+
+        const events = await loadEvents();
+        initCalendar(events);
+      } catch (err) {
+        console.error(err);
+        renderErrorFallback(err && err.message ? err.message : '系統初始化失敗');
+      }
+    }
+
+    boot();
   </script>
 </body>
 </html>
