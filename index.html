@@ -20,16 +20,12 @@
       --text:#1d2b3a;
       --text-soft:#5f748b;
       --primary:#4a90e2;
-      --primary-2:#6cb6ff;
+      --meeting:#8e6dd8;
+      --site:#f5a623;
       --green:#3cb878;
-      --orange:#f5a623;
-      --purple:#8e6dd8;
-      --danger:#e35d6a;
+      --danger:#d95c68;
       --shadow:0 10px 30px rgba(74,144,226,.10);
       --shadow-soft:0 8px 18px rgba(31,76,125,.08);
-      --radius-xl:24px;
-      --radius-lg:18px;
-      --radius-md:14px;
     }
 
     *{
@@ -58,7 +54,7 @@
     }
 
     .page{
-      max-width:1460px;
+      max-width:1480px;
       margin:0 auto;
       padding:18px;
     }
@@ -69,12 +65,13 @@
       justify-content:space-between;
       gap:14px;
       padding:16px 18px;
-      background:rgba(255,255,255,.82);
+      background:rgba(255,255,255,.86);
       border:1px solid rgba(191,212,238,.85);
       border-radius:24px;
       box-shadow:var(--shadow-soft);
       backdrop-filter:blur(10px);
       margin-bottom:18px;
+      flex-wrap:wrap;
     }
 
     .brand{
@@ -117,6 +114,10 @@
       font-weight:800;
       transition:.2s ease;
       box-shadow:0 4px 10px rgba(74,144,226,.05);
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:44px;
     }
 
     .btn:hover{
@@ -133,7 +134,7 @@
 
     .hero{
       display:grid;
-      grid-template-columns: 1.2fr .8fr;
+      grid-template-columns: 1.18fr .82fr;
       gap:18px;
       margin-bottom:18px;
     }
@@ -144,7 +145,7 @@
       border-radius:28px;
       box-shadow:var(--shadow);
       overflow:hidden;
-      min-height:300px;
+      min-height:320px;
     }
 
     .hero-left{
@@ -153,21 +154,6 @@
       flex-direction:column;
       justify-content:space-between;
       position:relative;
-    }
-
-    .hero-left::before{
-      content:"";
-      position:absolute;
-      inset:auto -60px -60px auto;
-      width:220px;
-      height:220px;
-      background:radial-gradient(circle, rgba(74,144,226,.12), transparent 70%);
-      pointer-events:none;
-    }
-
-    .hero-content{
-      position:relative;
-      z-index:1;
     }
 
     .hero-subtitle{
@@ -188,14 +174,13 @@
       font-weight:900;
       line-height:1.2;
       margin-bottom:12px;
-      letter-spacing:.5px;
     }
 
     .hero-desc{
       color:var(--text-soft);
       font-size:16px;
-      line-height:1.8;
-      max-width:720px;
+      line-height:1.85;
+      max-width:760px;
       margin-bottom:18px;
     }
 
@@ -231,7 +216,7 @@
 
     .hero-photo{
       position:relative;
-      min-height:300px;
+      min-height:320px;
       overflow:hidden;
       background:
         linear-gradient(180deg, rgba(234,242,252,.96), rgba(240,247,255,.96)),
@@ -257,6 +242,108 @@
       background:
         radial-gradient(circle at center, rgba(74,144,226,.12), transparent 50%),
         linear-gradient(180deg, #eef6ff, #f9fcff);
+      text-align:center;
+      padding:20px;
+      line-height:1.8;
+    }
+
+    .notice-panel{
+      margin-bottom:18px;
+      background:linear-gradient(180deg, #fffdf5, #fffaf0);
+      border:1px solid #f1e1b8;
+      border-radius:24px;
+      box-shadow:0 10px 24px rgba(230,174,53,.08);
+      overflow:hidden;
+    }
+
+    .notice-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding:18px 20px;
+      border-bottom:1px solid #f6ead1;
+      flex-wrap:wrap;
+    }
+
+    .notice-title{
+      font-size:24px;
+      font-weight:900;
+      color:#8f6400;
+    }
+
+    .notice-subtitle{
+      color:#9d7a1c;
+      font-size:13px;
+      font-weight:700;
+      margin-top:4px;
+    }
+
+    .notice-body{
+      padding:18px;
+      display:grid;
+      gap:12px;
+    }
+
+    .notice-card{
+      background:#fff;
+      border:1px solid #f3e2ba;
+      border-radius:18px;
+      padding:16px;
+      box-shadow:0 6px 14px rgba(199,156,49,.06);
+    }
+
+    .notice-card-top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-bottom:8px;
+    }
+
+    .notice-card-title{
+      font-size:20px;
+      font-weight:900;
+      color:#7d5a00;
+      line-height:1.35;
+    }
+
+    .notice-badges{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:8px 12px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:900;
+      white-space:nowrap;
+    }
+
+    .badge-api{ background:#eef6ff; color:#4a90e2; }
+    .badge-pinned{ background:#fff2cc; color:#9b6a00; }
+    .badge-priority{ background:#ffe8ea; color:#b53f4f; }
+
+    .notice-card-message{
+      color:#6a5730;
+      font-size:15px;
+      font-weight:700;
+      line-height:1.9;
+      white-space:pre-wrap;
+      word-break:break-word;
+    }
+
+    .notice-card-time{
+      margin-top:10px;
+      color:#9f8250;
+      font-size:12px;
+      font-weight:800;
     }
 
     .grid{
@@ -267,7 +354,7 @@
     }
 
     .panel{
-      background:rgba(255,255,255,.93);
+      background:rgba(255,255,255,.94);
       border:1px solid var(--line);
       border-radius:24px;
       box-shadow:var(--shadow-soft);
@@ -281,6 +368,7 @@
       gap:10px;
       padding:18px 20px;
       border-bottom:1px solid #edf3fa;
+      flex-wrap:wrap;
     }
 
     .panel-title{
@@ -305,18 +393,6 @@
       gap:10px;
       flex-wrap:wrap;
       align-items:center;
-    }
-
-    .badge{
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      padding:8px 12px;
-      border-radius:999px;
-      background:#eef6ff;
-      color:#4a90e2;
-      font-size:13px;
-      font-weight:800;
     }
 
     .status-box{
@@ -400,6 +476,10 @@
       border:none;
       cursor:pointer;
       box-shadow:0 10px 20px rgba(74,144,226,.20);
+      text-decoration:none;
+      pointer-events:auto;
+      position:relative;
+      z-index:2;
     }
 
     .link-btn:hover{
@@ -487,9 +567,9 @@
     }
 
     .tag-blue{ background:#eef6ff; color:#4a90e2; }
-    .tag-green{ background:#e9f9f1; color:#2f9961; }
-    .tag-orange{ background:#fff6e9; color:#d68a10; }
     .tag-purple{ background:#f3edff; color:#7d58cf; }
+    .tag-orange{ background:#fff6e9; color:#d68a10; }
+    .tag-green{ background:#e9f9f1; color:#2f9961; }
     .tag-gray{ background:#f1f4f8; color:#6b7d91; }
 
     .event-meta{
@@ -583,6 +663,17 @@
       font-weight:700;
     }
 
+    .empty-box{
+      border:1px solid #e3edf8;
+      background:#fbfdff;
+      color:#6f8498;
+      border-radius:16px;
+      padding:14px;
+      line-height:1.8;
+      font-size:14px;
+      font-weight:700;
+    }
+
     .footer-note{
       text-align:center;
       color:#7a8ea3;
@@ -642,6 +733,7 @@
       padding:3px 6px;
       margin-top:4px;
       box-shadow:0 6px 12px rgba(74,144,226,.14);
+      cursor:pointer;
     }
 
     .fc .fc-event-title{
@@ -701,18 +793,9 @@
         font-size:15px;
       }
 
-      .stat-pill{
-        min-width:unset;
-        flex:1 1 120px;
-      }
-
       .panel-head{
         flex-direction:column;
         align-items:flex-start;
-      }
-
-      .panel-title{
-        font-size:20px;
       }
 
       .detail-title{
@@ -755,12 +838,12 @@
 
     <section class="hero">
       <div class="hero-card hero-left">
-        <div class="hero-content">
-          <div class="hero-subtitle">活動總覽 / 日曆 / 區域分布</div>
-          <div class="hero-title">活動一進頁面就看得清楚</div>
+        <div>
+          <div class="hero-subtitle">活動總覽 / 布告欄 / 區域概覽</div>
+          <div class="hero-title">重要事情與活動，一眼就看懂</div>
           <div class="hero-desc">
-            這個頁面整合活動日曆、近期活動、活動詳情與台灣區域分布。
-            活動如果在南投，系統可歸類顯示為中部；若有活動連結，也可直接點進去查看。
+            這個首頁同時整合了重點布告欄、活動日曆、近期活動、活動詳細資訊與區域概覽。
+            活動可區分為「活動 / 會議 / 現勘」，並支援多筆連結，例如報名表、會議網址、簡報連結。
           </div>
 
           <div class="hero-stats">
@@ -773,8 +856,8 @@
               <div class="stat-value" id="statUpcomingCount">0</div>
             </div>
             <div class="stat-pill">
-              <div class="stat-label">區域數量</div>
-              <div class="stat-value" id="statRegionCount">0</div>
+              <div class="stat-label">置頂公告</div>
+              <div class="stat-value" id="statPinnedNoticeCount">0</div>
             </div>
           </div>
         </div>
@@ -790,6 +873,20 @@
       </div>
     </section>
 
+    <section class="notice-panel">
+      <div class="notice-head">
+        <div>
+          <div class="notice-title">📢 重點布告欄</div>
+          <div class="notice-subtitle">重要資訊、緊急通知、活動宣告會優先顯示於此</div>
+        </div>
+        <div class="badge badge-api" id="noticeApiBadge">公告待載入</div>
+      </div>
+
+      <div class="notice-body" id="noticeList">
+        <div class="loading-box">公告資料載入中...</div>
+      </div>
+    </section>
+
     <section class="grid">
       <div class="panel">
         <div class="panel-head">
@@ -797,9 +894,8 @@
             <div class="panel-title">活動日曆</div>
             <div class="panel-subtitle">支援月曆、週曆、列表檢視</div>
           </div>
-
           <div class="toolbar">
-            <span class="badge" id="apiStateBadge">系統待載入</span>
+            <span class="badge badge-api" id="apiStateBadge">活動待載入</span>
           </div>
         </div>
 
@@ -815,7 +911,7 @@
           <div class="panel-head">
             <div>
               <div class="panel-title">活動內容</div>
-              <div class="panel-subtitle">點日曆、點近期活動都可看詳細內容</div>
+              <div class="panel-subtitle">點日曆、點近期活動都可看詳細內容與多個連結</div>
             </div>
           </div>
 
@@ -828,7 +924,7 @@
           <div class="panel-head">
             <div>
               <div class="panel-title">近期活動</div>
-              <div class="panel-subtitle">最近 8 筆可直接點選</div>
+              <div class="panel-subtitle">最近 8 筆活動</div>
             </div>
           </div>
 
@@ -843,7 +939,7 @@
           <div class="panel-head">
             <div>
               <div class="panel-title">台灣區域概覽</div>
-              <div class="panel-subtitle">依活動地點自動顯示區域</div>
+              <div class="panel-subtitle">依活動地點自動統計區域</div>
             </div>
           </div>
 
@@ -851,12 +947,10 @@
             <div class="tw-grid" id="regionSummaryGrid">
               <div class="loading-box">區域統計載入中...</div>
             </div>
-            <div class="region-summary" id="regionSummaryText">
-              系統整理中...
-            </div>
+            <div class="region-summary" id="regionSummaryText">系統整理中...</div>
             <div class="map-note">
-              若活動地點含「南投、台中、彰化」等文字，系統可自動歸類至中部；
-              若你在後台已手動指定區域，則以後台設定為主。
+              若活動地點含「南投、台中、彰化」等文字，系統會歸類為中部；
+              若你已在後台手動指定區域，則以前台讀到的區域為準。
             </div>
           </div>
         </div>
@@ -873,6 +967,7 @@
 
     let calendar = null;
     let allEvents = [];
+    let allAnnouncements = [];
 
     function $(id) {
       return document.getElementById(id);
@@ -937,36 +1032,37 @@
       });
     }
 
+    function handleHeroFallback() {
+      $('heroPhotoWrap').innerHTML =
+        '<div class="photo-fallback">首頁照片載入失敗<br>請將圖片放到 /assets/hero.jpg</div>';
+    }
+
+    window.handleHeroFallback = handleHeroFallback;
+
     function setStatus(text, isError = false) {
       $('statusBox').innerHTML = isError
         ? '<div class="error-box">' + safe(text) + '</div>'
         : safe(text);
     }
 
-    function setApiBadge(text, type) {
-      const el = $('apiStateBadge');
+    function setBadge(el, text, mode) {
       el.textContent = text;
-      el.style.background = '#eef6ff';
-      el.style.color = '#4a90e2';
+      el.className = 'badge badge-api';
 
-      if (type === 'ok') {
+      if (mode === 'ok') {
         el.style.background = '#e9f9f1';
         el.style.color = '#2f9961';
-      } else if (type === 'error') {
+      } else if (mode === 'error') {
         el.style.background = '#fff3f5';
         el.style.color = '#c25163';
-      } else if (type === 'warn') {
+      } else if (mode === 'warn') {
         el.style.background = '#fff7eb';
         el.style.color = '#d28713';
+      } else {
+        el.style.background = '#eef6ff';
+        el.style.color = '#4a90e2';
       }
     }
-
-    function handleHeroFallback() {
-      const wrap = $('heroPhotoWrap');
-      wrap.innerHTML = '<div class="photo-fallback">首頁照片載入失敗，請將圖片放到 /assets/hero.jpg</div>';
-    }
-
-    window.handleHeroFallback = handleHeroFallback;
 
     function parseDate(v) {
       if (!v) return null;
@@ -997,34 +1093,85 @@
       });
     }
 
+    function getTypeColor(type) {
+      if (type === '會議') return '#8e6dd8';
+      if (type === '現勘') return '#f5a623';
+      return '#4a90e2';
+    }
+
+    function normalizeEvents(rawEvents) {
+      if (!Array.isArray(rawEvents)) return [];
+
+      return rawEvents.map(function(e) {
+        const p = e && e.extendedProps ? e.extendedProps : {};
+        const eventType = safeText(p.eventType, '活動');
+
+        return {
+          id: safeText(e.id, 'EVT-' + Math.random().toString(36).slice(2)),
+          title: safeText(e.title, '未命名活動'),
+          start: safeText(e.start, ''),
+          end: safeText(e.end, ''),
+          allDay: !!e.allDay,
+          color: safeText(e.color, getTypeColor(eventType)),
+          extendedProps: {
+            location: safeText(p.location, ''),
+            description: safeText(p.description, ''),
+            updateAt: safeText(p.updateAt, ''),
+            region: safeText(p.region, '未分類'),
+            eventType: eventType,
+            links: Array.isArray(p.links) ? p.links : []
+          }
+        };
+      });
+    }
+
+    function normalizeAnnouncements(rawList) {
+      if (!Array.isArray(rawList)) return [];
+
+      return rawList.map(function(a) {
+        return {
+          id: safeText(a.id, 'ANN-' + Math.random().toString(36).slice(2)),
+          title: safeText(a.title, '未命名公告'),
+          message: safeText(a.message, ''),
+          isPinned: !!a.isPinned,
+          priority: Number(a.priority || 0),
+          updateAt: safeText(a.updateAt, '')
+        };
+      });
+    }
+
+    function getEventTypeFromEvent(e) {
+      return safeText(e && e.extendedProps && e.extendedProps.eventType, '活動');
+    }
+
     function getRegionFromEvent(e) {
-      const p = (e && e.extendedProps) ? e.extendedProps : {};
-      return safeText(p.region, '未分類');
+      return safeText(e && e.extendedProps && e.extendedProps.region, '未分類');
     }
 
     function getLocationFromEvent(e) {
-      const p = (e && e.extendedProps) ? e.extendedProps : {};
-      return safeText(p.location, '未填地點');
+      return safeText(e && e.extendedProps && e.extendedProps.location, '未填地點');
     }
 
     function getDescriptionFromEvent(e) {
-      const p = (e && e.extendedProps) ? e.extendedProps : {};
-      return safeText(p.description, '未填說明');
+      return safeText(e && e.extendedProps && e.extendedProps.description, '未填說明');
     }
 
     function getUpdateAtFromEvent(e) {
-      const p = (e && e.extendedProps) ? e.extendedProps : {};
-      return safeText(p.updateAt, '未更新');
+      return safeText(e && e.extendedProps && e.extendedProps.updateAt, '未更新');
     }
 
-    function getEventLinkFromEvent(e) {
-      const p = (e && e.extendedProps) ? e.extendedProps : {};
-      return safeText(p.eventLink, '');
-    }
-
-    function getColorFromEvent(e) {
-      const c = safeText(e && e.backgroundColor ? e.backgroundColor : e && e.color ? e.color : '', '#4a90e2');
-      return /^#[0-9a-fA-F]{6}$/.test(c) ? c : '#4a90e2';
+    function getLinksFromEvent(e) {
+      const links = e && e.extendedProps && Array.isArray(e.extendedProps.links) ? e.extendedProps.links : [];
+      return links
+        .map(function(link) {
+          return {
+            label: safeText(link && link.label, '未命名連結'),
+            url: safeText(link && link.url, '')
+          };
+        })
+        .filter(function(link) {
+          return !!link.url;
+        });
     }
 
     function showDetail(eventObj) {
@@ -1040,20 +1187,31 @@
       const desc = getDescriptionFromEvent(eventObj);
       const updateAt = getUpdateAtFromEvent(eventObj);
       const region = getRegionFromEvent(eventObj);
-      const eventLink = getEventLinkFromEvent(eventObj);
+      const eventType = getEventTypeFromEvent(eventObj);
+      const links = getLinksFromEvent(eventObj);
 
-      const actionsHtml = eventLink
-        ? '<div class="detail-actions">' +
-            '<a class="link-btn" href="' + safe(eventLink) + '" target="_blank" rel="noopener noreferrer">前往活動連結</a>' +
-            '<button class="ghost-btn" type="button" onclick="copyLink(\'' + safe(eventLink).replace(/'/g, '&#39;') + '\')">複製連結</button>' +
-          '</div>'
-        : '<div class="detail-actions">' +
+      let linksHtml = '';
+
+      if (links.length) {
+        linksHtml = '<div class="detail-actions">';
+        links.forEach(function(link) {
+          linksHtml +=
+            '<a class="link-btn" href="' + safe(link.url) + '" target="_blank" rel="noopener noreferrer">' +
+            safe(link.label) +
+            '</a>';
+        });
+        linksHtml += '</div>';
+      } else {
+        linksHtml =
+          '<div class="detail-actions">' +
             '<button class="ghost-btn" type="button" disabled style="opacity:.55; cursor:not-allowed;">未設定活動連結</button>' +
           '</div>';
+      }
 
       $('detailBox').innerHTML =
         '<div class="detail-title">' + safe(title) + '</div>' +
         '<div class="detail-grid">' +
+          '<div class="detail-item"><div class="detail-label">活動類型</div><div class="detail-value">' + safe(eventType) + '</div></div>' +
           '<div class="detail-item"><div class="detail-label">開始時間</div><div class="detail-value">' + safe(startText) + '</div></div>' +
           '<div class="detail-item"><div class="detail-label">結束時間</div><div class="detail-value">' + safe(endText) + '</div></div>' +
           '<div class="detail-item"><div class="detail-label">活動地點</div><div class="detail-value">' + safe(location) + '</div></div>' +
@@ -1061,24 +1219,17 @@
           '<div class="detail-item"><div class="detail-label">活動內容</div><div class="detail-value">' + safe(desc) + '</div></div>' +
           '<div class="detail-item"><div class="detail-label">最後更新</div><div class="detail-value">' + safe(updateAt) + '</div></div>' +
         '</div>' +
-        actionsHtml;
+        linksHtml;
     }
 
-    async function copyLink(link) {
-      try {
-        if (!link) return;
-        await navigator.clipboard.writeText(link);
-        alert('連結已複製');
-      } catch (err) {
-        alert('無法直接複製，請手動複製連結');
-      }
-    }
+    function buildTagHtml(region, eventType, allDay) {
+      const typeClass = eventType === '會議' ? 'tag-purple' : (eventType === '現勘' ? 'tag-orange' : 'tag-blue');
 
-    function buildTagHtml(region, allDay) {
       return (
         '<div class="tag-row">' +
-          '<span class="tag tag-blue">' + safe(region || '未分類') + '</span>' +
-          '<span class="tag ' + (allDay ? 'tag-purple' : 'tag-green') + '">' + (allDay ? '全天活動' : '一般活動') + '</span>' +
+          '<span class="tag tag-gray">' + safe(region || '未分類') + '</span>' +
+          '<span class="tag ' + typeClass + '">' + safe(eventType || '活動') + '</span>' +
+          '<span class="tag ' + (allDay ? 'tag-green' : 'tag-gray') + '">' + (allDay ? '全天' : '一般時段') + '</span>' +
         '</div>'
       );
     }
@@ -1087,7 +1238,7 @@
       const box = $('upcomingList');
 
       if (!Array.isArray(events) || !events.length) {
-        box.innerHTML = '<div class="loading-box">目前沒有活動資料。</div>';
+        box.innerHTML = '<div class="empty-box">目前沒有活動資料。</div>';
         return;
       }
 
@@ -1095,11 +1246,11 @@
       const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
       const sorted = events
-        .filter(e => {
+        .filter(function(e) {
           const d = parseDate(e.start);
           return d ? d >= new Date(startOfToday.getTime() - 86400000) : false;
         })
-        .sort((a, b) => {
+        .sort(function(a, b) {
           const ta = parseDate(a.start) ? parseDate(a.start).getTime() : 0;
           const tb = parseDate(b.start) ? parseDate(b.start).getTime() : 0;
           return ta - tb;
@@ -1107,27 +1258,30 @@
         .slice(0, 8);
 
       if (!sorted.length) {
-        box.innerHTML = '<div class="loading-box">目前沒有近期活動。</div>';
+        box.innerHTML = '<div class="empty-box">目前沒有近期活動。</div>';
         return;
       }
 
       box.innerHTML = sorted.map(function(e) {
-        const location = safeText(e.extendedProps && e.extendedProps.location, '未填地點');
-        const region = safeText(e.extendedProps && e.extendedProps.region, '未分類');
-        const color = safe(getColorFromEvent(e));
-        const timeText = safe(formatDateTime(e.start, e.allDay));
+        const location = getLocationFromEvent(e);
+        const region = getRegionFromEvent(e);
+        const eventType = getEventTypeFromEvent(e);
+        const color = safeText(e.color, getTypeColor(eventType));
+        const timeText = formatDateTime(e.start, e.allDay);
+        const linksCount = getLinksFromEvent(e).length;
         const title = safeText(e.title, '未命名活動');
 
         return (
           '<div class="event-card" data-id="' + safe(e.id) + '">' +
             '<div class="event-top">' +
-              '<div class="event-color" style="background:' + color + ';"></div>' +
+              '<div class="event-color" style="background:' + safe(color) + ';"></div>' +
               '<div class="event-title">' + safe(title) + '</div>' +
             '</div>' +
-            buildTagHtml(region, !!e.allDay) +
+            buildTagHtml(region, eventType, !!e.allDay) +
             '<div class="event-meta">' +
               safe(timeText) + '<br>' +
-              safe(location) +
+              safe(location) + '<br>' +
+              '連結：' + safe(linksCount) + ' 筆' +
             '</div>' +
           '</div>'
         );
@@ -1140,9 +1294,7 @@
           const fcEvent = calendar.getEventById(id);
           if (!fcEvent) return;
           showDetail(fcEvent);
-          if (fcEvent.start) {
-            calendar.gotoDate(fcEvent.start);
-          }
+          if (fcEvent.start) calendar.gotoDate(fcEvent.start);
         });
       });
     }
@@ -1152,7 +1304,7 @@
       const text = $('regionSummaryText');
 
       if (!Array.isArray(events) || !events.length) {
-        grid.innerHTML = '<div class="loading-box">目前沒有區域資料。</div>';
+        grid.innerHTML = '<div class="empty-box">目前沒有區域資料。</div>';
         text.textContent = '目前沒有活動，因此無法統計區域分布。';
         return;
       }
@@ -1167,7 +1319,7 @@
       };
 
       events.forEach(function(e) {
-        const region = safeText(e.extendedProps && e.extendedProps.region, '未分類');
+        const region = getRegionFromEvent(e);
         if (counts[region] == null) counts['未分類'] += 1;
         else counts[region] += 1;
       });
@@ -1197,7 +1349,8 @@
         return b[1] - a[1];
       })[0];
 
-      text.textContent = '目前活動最多的區域為「' + topRegion[0] + '」，共有 ' + topRegion[1] + ' 筆活動。你也可以進入台灣區域頁看更完整的區域活動列表。';
+      text.textContent =
+        '目前活動最多的區域為「' + topRegion[0] + '」，共有 ' + topRegion[1] + ' 筆活動。你也可以進入台灣區域頁看更完整的區域活動列表。';
 
       grid.querySelectorAll('.region-item').forEach(function(el) {
         el.addEventListener('click', function() {
@@ -1205,8 +1358,36 @@
           window.location.href = './region.html?region=' + encodeURIComponent(region);
         });
       });
+    }
 
-      $('statRegionCount').textContent = Object.values(counts).filter(function(v) { return v > 0; }).length;
+    function renderAnnouncements(list) {
+      const box = $('noticeList');
+
+      if (!Array.isArray(list) || !list.length) {
+        box.innerHTML = '<div class="empty-box">目前沒有公告資料。</div>';
+        $('statPinnedNoticeCount').textContent = '0';
+        return;
+      }
+
+      const pinnedCount = list.filter(function(a) { return !!a.isPinned; }).length;
+      $('statPinnedNoticeCount').textContent = String(pinnedCount);
+
+      box.innerHTML = list.map(function(item) {
+        const badges = [];
+        if (item.isPinned) badges.push('<span class="badge badge-pinned">置頂</span>');
+        badges.push('<span class="badge badge-priority">Priority ' + safe(item.priority) + '</span>');
+
+        return (
+          '<div class="notice-card">' +
+            '<div class="notice-card-top">' +
+              '<div class="notice-card-title">' + safe(item.title) + '</div>' +
+              '<div class="notice-badges">' + badges.join('') + '</div>' +
+            '</div>' +
+            '<div class="notice-card-message">' + safe(item.message) + '</div>' +
+            '<div class="notice-card-time">更新時間：' + safe(item.updateAt || '未更新') + '</div>' +
+          '</div>'
+        );
+      }).join('');
     }
 
     function updateHeroStats(events) {
@@ -1226,62 +1407,55 @@
         return d && d >= new Date(now.getFullYear(), now.getMonth(), now.getDate());
       }).length;
 
-      $('statMonthCount').textContent = monthCount;
-      $('statUpcomingCount').textContent = upcomingCount;
-    }
-
-    function normalizeEvents(rawEvents) {
-      if (!Array.isArray(rawEvents)) return [];
-
-      return rawEvents.map(function(e) {
-        const p = e && e.extendedProps ? e.extendedProps : {};
-        return {
-          id: safeText(e.id, 'EVT-' + Math.random().toString(36).slice(2)),
-          title: safeText(e.title, '未命名活動'),
-          start: safeText(e.start, ''),
-          end: safeText(e.end, ''),
-          allDay: !!e.allDay,
-          color: safeText(e.color, '#4a90e2'),
-          extendedProps: {
-            location: safeText(p.location, ''),
-            description: safeText(p.description, ''),
-            updateAt: safeText(p.updateAt, ''),
-            eventLink: safeText(p.eventLink, ''),
-            region: safeText(p.region, '未分類')
-          }
-        };
-      });
+      $('statMonthCount').textContent = String(monthCount);
+      $('statUpcomingCount').textContent = String(upcomingCount);
     }
 
     function renderErrorFallback(message) {
       setStatus(message || '活動資料讀取失敗', true);
-      setApiBadge('API 連線失敗', 'error');
-
+      setBadge($('apiStateBadge'), '活動連線失敗', 'error');
       $('upcomingList').innerHTML =
         '<div class="error-box">無法載入近期活動，請確認 Apps Script 是否已重新部署、API_URL 是否正確、Web App 權限是否為任何人。</div>';
-
       $('detailBox').innerHTML =
         '<div class="error-box">目前無法顯示活動詳情，請先排除 API 問題。</div>';
-
       $('regionSummaryGrid').innerHTML =
         '<div class="error-box">無法載入區域統計。</div>';
-
       $('regionSummaryText').textContent = '目前無法取得活動資料。';
+    }
+
+    function renderNoticeError(message) {
+      setBadge($('noticeApiBadge'), '公告連線失敗', 'error');
+      $('noticeList').innerHTML =
+        '<div class="error-box">' + safe(message || '無法載入公告資料') + '</div>';
+      $('statPinnedNoticeCount').textContent = '0';
+    }
+
+    async function loadAnnouncements() {
+      setBadge($('noticeApiBadge'), '公告載入中', 'warn');
+
+      const data = await jsonp(API_URL + '?action=list_announcements');
+
+      if (!data || !data.ok) {
+        throw new Error((data && data.message) ? data.message : '公告 API 回傳失敗');
+      }
+
+      allAnnouncements = normalizeAnnouncements(data.announcements || []);
+      renderAnnouncements(allAnnouncements);
+      setBadge($('noticeApiBadge'), '公告正常', 'ok');
     }
 
     async function loadEvents() {
       setStatus('活動資料讀取中...');
-      setApiBadge('資料載入中', 'warn');
+      setBadge($('apiStateBadge'), '活動載入中', 'warn');
 
-      const data = await jsonp(API_URL + '?action=list');
+      const data = await jsonp(API_URL + '?action=list_events');
 
       if (!data || !data.ok) {
-        throw new Error((data && data.message) ? data.message : 'API 回傳失敗');
+        throw new Error((data && data.message) ? data.message : '活動 API 回傳失敗');
       }
 
       allEvents = normalizeEvents(data.events || []);
-
-      setApiBadge('API 正常', 'ok');
+      setBadge($('apiStateBadge'), '活動正常', 'ok');
       setStatus('活動資料已載入，共 ' + allEvents.length + ' 筆。');
 
       updateHeroStats(allEvents);
@@ -1351,6 +1525,13 @@
       try {
         if (!API_URL || API_URL === 'YOUR_GAS_WEBAPP_URL') {
           throw new Error('尚未設定 API_URL，請先把 index.html 裡的 YOUR_GAS_WEBAPP_URL 換成你的 Apps Script 網址');
+        }
+
+        try {
+          await loadAnnouncements();
+        } catch (noticeErr) {
+          console.error(noticeErr);
+          renderNoticeError(noticeErr && noticeErr.message ? noticeErr.message : '公告載入失敗');
         }
 
         const events = await loadEvents();
