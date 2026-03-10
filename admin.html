@@ -15,10 +15,11 @@
       --text:#1d2b3a;
       --text-soft:#5f748b;
       --primary:#4a90e2;
+      --meeting:#8e6dd8;
+      --site:#f5a623;
       --green:#38b36e;
       --danger:#d95c68;
       --warn:#d89218;
-      --purple:#8e6dd8;
       --shadow:0 10px 28px rgba(74,144,226,.10);
       --shadow-soft:0 8px 18px rgba(31,76,125,.08);
     }
@@ -36,17 +37,11 @@
       min-height:100vh;
     }
 
-    a{
-      color:inherit;
-      text-decoration:none;
-    }
-
-    button, input, textarea, select{
-      font-family:inherit;
-    }
+    a{ color:inherit; text-decoration:none; }
+    button, input, textarea, select{ font-family:inherit; }
 
     .page{
-      max-width:1480px;
+      max-width:1520px;
       margin:0 auto;
       padding:18px;
     }
@@ -103,6 +98,10 @@
       font-weight:800;
       transition:.2s ease;
       box-shadow:0 4px 10px rgba(74,144,226,.05);
+      min-height:44px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
     }
 
     .btn:hover{
@@ -129,15 +128,20 @@
       border-color:#f2ddb1;
     }
 
-    .btn-purple{
-      background:#f4efff;
-      color:#6d50b8;
-      border-color:#ddd0ff;
+    .btn-green{
+      background:#eefaf4;
+      color:#28784d;
+      border-color:#cfeedd;
     }
 
     .grid{
       display:grid;
-      grid-template-columns: 500px 1fr;
+      grid-template-columns: 520px 1fr;
+      gap:18px;
+    }
+
+    .stack{
+      display:grid;
       gap:18px;
     }
 
@@ -185,10 +189,7 @@
       line-height:1.7;
     }
 
-    .ok-box,
-    .warn-box,
-    .error-box,
-    .loading-box{
+    .ok-box, .warn-box, .error-box, .loading-box{
       border-radius:16px;
       padding:14px;
       font-size:14px;
@@ -259,7 +260,7 @@
     }
 
     .field textarea{
-      min-height:120px;
+      min-height:110px;
       resize:vertical;
     }
 
@@ -323,7 +324,7 @@
 
     .link-row{
       display:grid;
-      grid-template-columns: 1fr 1.4fr auto;
+      grid-template-columns: 1fr 1.5fr auto;
       gap:10px;
       align-items:center;
     }
@@ -355,7 +356,7 @@
     }
 
     .search{
-      flex:1 1 240px;
+      flex:1 1 260px;
       min-width:220px;
     }
 
@@ -382,7 +383,7 @@
       font-weight:900;
     }
 
-    .event-list{
+    .list{
       display:grid;
       gap:12px;
     }
@@ -407,6 +408,7 @@
       justify-content:space-between;
       gap:10px;
       align-items:flex-start;
+      flex-wrap:wrap;
     }
 
     .item-main{
@@ -452,10 +454,11 @@
     }
 
     .tag-blue{ background:#eef6ff; color:#4a90e2; }
-    .tag-green{ background:#e9f9f1; color:#2f9961; }
-    .tag-orange{ background:#fff6e9; color:#d68a10; }
     .tag-purple{ background:#f3edff; color:#7d58cf; }
+    .tag-orange{ background:#fff6e9; color:#d68a10; }
+    .tag-green{ background:#e9f9f1; color:#2f9961; }
     .tag-gray{ background:#f1f4f8; color:#6b7d91; }
+    .tag-red{ background:#fff1f3; color:#c23d53; }
 
     .item-meta{
       color:#5e7388;
@@ -511,10 +514,6 @@
       .link-row{
         grid-template-columns:1fr;
       }
-
-      .item-top{
-        flex-direction:column;
-      }
     }
   </style>
 </head>
@@ -529,137 +528,206 @@
       <div class="top-actions">
         <a class="btn" href="./index.html">前台首頁</a>
         <a class="btn" href="./region.html">台灣區域頁</a>
-        <button class="btn btn-warning" type="button" id="btnReset">清空表單</button>
-        <button class="btn btn-primary" type="button" id="btnReload">重新整理</button>
+        <button class="btn btn-warning" type="button" id="btnResetEvent">清空活動表單</button>
+        <button class="btn btn-primary" type="button" id="btnReloadAll">全部重新整理</button>
       </div>
     </div>
 
     <div class="grid">
-      <div class="panel">
-        <div class="panel-head">
-          <div>
-            <div class="panel-title">活動表單</div>
-            <div class="panel-subtitle">新增、修改、刪除、多連結管理</div>
+      <div class="stack">
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title">活動表單</div>
+              <div class="panel-subtitle">新增 / 修改 / 刪除活動，支援多個連結</div>
+            </div>
+          </div>
+
+          <div class="panel-body">
+            <div class="form-grid">
+              <div class="field">
+                <label for="password">管理密碼</label>
+                <input id="password" type="password" value="12345678" autocomplete="off">
+                <small>請改成你在 Apps Script 裡設定的 ADMIN_PASSWORD。</small>
+              </div>
+
+              <input id="eventId" type="hidden">
+
+              <div class="field">
+                <label for="eventTitle">活動名稱</label>
+                <input id="eventTitle" type="text" placeholder="例如：工程安全教育">
+              </div>
+
+              <div class="row-2">
+                <div class="field">
+                  <label for="eventStart">開始時間</label>
+                  <input id="eventStart" type="datetime-local">
+                </div>
+                <div class="field">
+                  <label for="eventEnd">結束時間</label>
+                  <input id="eventEnd" type="datetime-local">
+                </div>
+              </div>
+
+              <div class="inline-check">
+                <input id="eventAllDay" type="checkbox">
+                <label for="eventAllDay" style="font-weight:900;color:#35516d;">全天活動</label>
+              </div>
+
+              <div class="row-2">
+                <div class="field">
+                  <label for="eventType">活動類型</label>
+                  <select id="eventType">
+                    <option value="活動">活動</option>
+                    <option value="會議">會議</option>
+                    <option value="現勘">現勘</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label for="eventRegion">活動區域</label>
+                  <select id="eventRegion">
+                    <option value="">自動判斷</option>
+                    <option value="北部">北部</option>
+                    <option value="中部">中部</option>
+                    <option value="南部">南部</option>
+                    <option value="東部">東部</option>
+                    <option value="離島">離島</option>
+                    <option value="未分類">未分類</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="eventLocation">活動地點</label>
+                <input id="eventLocation" type="text" placeholder="例如：南投市文化中心">
+              </div>
+
+              <div class="field">
+                <label for="eventDescription">活動內容</label>
+                <textarea id="eventDescription" placeholder="可輸入活動詳細說明"></textarea>
+              </div>
+
+              <div class="row-2">
+                <div class="field">
+                  <label for="eventColor">活動顏色</label>
+                  <input id="eventColor" type="color" value="#4a90e2">
+                </div>
+                <div class="field">
+                  <label for="eventLinksJson">連結資料儲存</label>
+                  <input id="eventLinksJson" type="text" readonly placeholder="系統自動產生">
+                </div>
+              </div>
+
+              <div class="section-card">
+                <div class="section-head">
+                  <div class="section-title">活動連結</div>
+                  <button class="btn btn-green" type="button" id="btnAddLink">新增連結</button>
+                </div>
+                <div class="links-wrap" id="eventLinksWrap"></div>
+              </div>
+
+              <div class="action-row">
+                <button class="btn btn-primary" type="button" id="btnSaveEvent">儲存活動</button>
+                <button class="btn btn-danger" type="button" id="btnDeleteEvent">刪除活動</button>
+              </div>
+            </div>
+
+            <div class="status-box" id="eventStatusBox">尚未操作。</div>
           </div>
         </div>
 
-        <div class="panel-body">
-          <div class="form-grid">
-            <div class="field">
-              <label for="password">管理密碼</label>
-              <input id="password" type="password" value="12345678" autocomplete="off">
-              <small>請改成你在 Apps Script 裡設定的 ADMIN_PASSWORD。</small>
-            </div>
-
-            <input id="id" type="hidden">
-
-            <div class="field">
-              <label for="title">活動名稱</label>
-              <input id="title" type="text" placeholder="例如：工程安全教育">
-            </div>
-
-            <div class="row-2">
-              <div class="field">
-                <label for="start">開始時間</label>
-                <input id="start" type="datetime-local">
-              </div>
-
-              <div class="field">
-                <label for="end">結束時間</label>
-                <input id="end" type="datetime-local">
-              </div>
-            </div>
-
-            <div class="inline-check">
-              <input id="allDay" type="checkbox">
-              <label for="allDay" style="font-weight:900; color:#35516d;">全天活動</label>
-            </div>
-
-            <div class="row-2">
-              <div class="field">
-                <label for="eventType">活動類型</label>
-                <select id="eventType">
-                  <option value="一般活動">一般活動</option>
-                  <option value="會議">會議</option>
-                  <option value="教育訓練">教育訓練</option>
-                  <option value="驗收">驗收</option>
-                  <option value="展示">展示</option>
-                  <option value="其他">其他</option>
-                </select>
-              </div>
-
-              <div class="field">
-                <label for="region">活動區域</label>
-                <select id="region">
-                  <option value="">自動判斷</option>
-                  <option value="北部">北部</option>
-                  <option value="中部">中部</option>
-                  <option value="南部">南部</option>
-                  <option value="東部">東部</option>
-                  <option value="離島">離島</option>
-                  <option value="未分類">未分類</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="field">
-              <label for="location">活動地點</label>
-              <input id="location" type="text" placeholder="例如：南投市文化中心">
-            </div>
-
-            <div class="field">
-              <label for="description">活動內容</label>
-              <textarea id="description" placeholder="可輸入活動詳細說明"></textarea>
-            </div>
-
-            <div class="row-2">
-              <div class="field">
-                <label for="color">活動顏色</label>
-                <input id="color" type="color" value="#4a90e2">
-              </div>
-              <div class="field">
-                <label>連結資料儲存</label>
-                <input id="linksJson" type="text" readonly placeholder="系統自動產生">
-              </div>
-            </div>
-
-            <div class="section-card">
-              <div class="section-head">
-                <div class="section-title">活動連結</div>
-                <button class="btn btn-purple" type="button" id="btnAddLink">新增連結</button>
-              </div>
-
-              <div class="links-wrap" id="linksWrap"></div>
-            </div>
-
-            <div class="action-row">
-              <button class="btn btn-primary" type="button" id="btnSave">儲存活動</button>
-              <button class="btn btn-danger" type="button" id="btnDelete">刪除活動</button>
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title">公告表單</div>
+              <div class="panel-subtitle">新增 / 修改 / 刪除重點布告欄內容</div>
             </div>
           </div>
 
-          <div class="status-box" id="statusBox">尚未操作。</div>
+          <div class="panel-body">
+            <div class="form-grid">
+              <input id="noticeId" type="hidden">
+
+              <div class="field">
+                <label for="noticeTitle">公告標題</label>
+                <input id="noticeTitle" type="text" placeholder="例如：7/12 中部演訓注意事項">
+              </div>
+
+              <div class="field">
+                <label for="noticeMessage">公告內容</label>
+                <textarea id="noticeMessage" placeholder="請輸入公告內容"></textarea>
+              </div>
+
+              <div class="row-2">
+                <div class="field">
+                  <label for="noticePriority">優先順序</label>
+                  <input id="noticePriority" type="number" value="50" min="0" step="1">
+                </div>
+
+                <div class="field">
+                  <label>置頂設定</label>
+                  <div class="inline-check">
+                    <input id="noticePinned" type="checkbox" checked>
+                    <label for="noticePinned" style="font-weight:900;color:#35516d;">置頂公告</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="action-row">
+                <button class="btn btn-primary" type="button" id="btnSaveNotice">儲存公告</button>
+                <button class="btn btn-danger" type="button" id="btnDeleteNotice">刪除公告</button>
+                <button class="btn btn-warning" type="button" id="btnResetNotice">清空公告表單</button>
+              </div>
+            </div>
+
+            <div class="status-box" id="noticeStatusBox">尚未操作。</div>
+          </div>
         </div>
       </div>
 
-      <div class="panel">
-        <div class="panel-head">
-          <div>
-            <div class="panel-title">活動清單</div>
-            <div class="panel-subtitle">點選編輯即可帶入表單</div>
+      <div class="stack">
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title">活動清單</div>
+              <div class="panel-subtitle">點選編輯即可帶入活動表單</div>
+            </div>
+          </div>
+
+          <div class="panel-body">
+            <div class="toolbar">
+              <div class="search">
+                <input id="eventSearchInput" type="text" placeholder="搜尋活動名稱、地點、區域、類型">
+              </div>
+              <div class="count-badge" id="eventCountBadge">共 0 筆</div>
+            </div>
+
+            <div class="list" id="eventList">
+              <div class="loading-box">活動資料載入中...</div>
+            </div>
           </div>
         </div>
 
-        <div class="panel-body">
-          <div class="toolbar">
-            <div class="search">
-              <input id="searchInput" type="text" placeholder="搜尋活動名稱、地點、區域、類型">
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title">公告清單</div>
+              <div class="panel-subtitle">點選編輯即可帶入公告表單</div>
             </div>
-            <div class="count-badge" id="countBadge">共 0 筆</div>
           </div>
 
-          <div class="event-list" id="eventList">
-            <div class="loading-box">活動資料載入中...</div>
+          <div class="panel-body">
+            <div class="toolbar">
+              <div class="search">
+                <input id="noticeSearchInput" type="text" placeholder="搜尋公告標題、內容">
+              </div>
+              <div class="count-badge" id="noticeCountBadge">共 0 筆</div>
+            </div>
+
+            <div class="list" id="noticeList">
+              <div class="loading-box">公告資料載入中...</div>
+            </div>
           </div>
         </div>
       </div>
@@ -672,8 +740,8 @@
     const API_URL = 'https://script.google.com/macros/s/AKfycbxUz8ob0qV6G7cmGAYwqKvR7UCisLAEsiKv2GKqwKmST7HG1YsO2iTFgSIZIulicIqi/exec';
 
     let allEvents = [];
-    let pendingAction = '';
-    let linkRowSeq = 0;
+    let allAnnouncements = [];
+    let eventLinkRowSeq = 0;
 
     function $(id) {
       return document.getElementById(id);
@@ -738,24 +806,6 @@
       });
     }
 
-    function setStatus(type, text) {
-      const box = $('statusBox');
-      if (!text) {
-        box.textContent = '';
-        return;
-      }
-
-      if (type === 'ok') {
-        box.innerHTML = '<div class="ok-box">' + safe(text) + '</div>';
-      } else if (type === 'error') {
-        box.innerHTML = '<div class="error-box">' + safe(text) + '</div>';
-      } else if (type === 'warn') {
-        box.innerHTML = '<div class="warn-box">' + safe(text) + '</div>';
-      } else {
-        box.innerHTML = '<div class="loading-box">' + safe(text) + '</div>';
-      }
-    }
-
     function parseDate(v) {
       if (!v) return null;
       const d = new Date(v);
@@ -796,156 +846,69 @@
       return yyyy + '-' + mm + '-' + dd + 'T' + hh + ':' + mi;
     }
 
+    function getTypeColor(type) {
+      if (type === '會議') return '#8e6dd8';
+      if (type === '現勘') return '#f5a623';
+      return '#4a90e2';
+    }
+
     function normalizeEvents(rawEvents) {
       if (!Array.isArray(rawEvents)) return [];
 
       return rawEvents.map(function(e) {
         const p = e && e.extendedProps ? e.extendedProps : {};
+        const eventType = safeText(p.eventType, '活動');
+
         return {
           id: safeText(e.id, 'EVT-' + Math.random().toString(36).slice(2)),
           title: safeText(e.title, '未命名活動'),
           start: safeText(e.start, ''),
           end: safeText(e.end, ''),
           allDay: !!e.allDay,
-          color: safeText(e.color, '#4a90e2'),
+          color: safeText(e.color, getTypeColor(eventType)),
           extendedProps: {
             location: safeText(p.location, ''),
             description: safeText(p.description, ''),
             updateAt: safeText(p.updateAt, ''),
             region: safeText(p.region, '未分類'),
-            eventType: safeText(p.eventType, '一般活動'),
+            eventType: eventType,
             links: Array.isArray(p.links) ? p.links : []
           }
         };
       });
     }
 
-    function getColor(e) {
-      const c = safeText(e && e.color, '#4a90e2');
-      return /^#[0-9a-fA-F]{6}$/.test(c) ? c : '#4a90e2';
-    }
+    function normalizeAnnouncements(rawList) {
+      if (!Array.isArray(rawList)) return [];
 
-    function addLinkRow(data) {
-      const wrap = $('linksWrap');
-      const rowId = 'linkRow_' + (++linkRowSeq);
-
-      const row = document.createElement('div');
-      row.className = 'link-row';
-      row.id = rowId;
-
-      row.innerHTML = `
-        <input type="text" class="link-label" placeholder="連結名稱，例如：報名表" value="${safe(data && data.label || '')}">
-        <input type="text" class="link-url" placeholder="連結網址，例如：https://example.com" value="${safe(data && data.url || '')}">
-        <button class="btn btn-danger" type="button">刪除</button>
-      `;
-
-      row.querySelector('button').addEventListener('click', function() {
-        row.remove();
-        syncLinksJsonField();
-      });
-
-      row.querySelectorAll('input').forEach(function(input) {
-        input.addEventListener('input', syncLinksJsonField);
-      });
-
-      wrap.appendChild(row);
-      syncLinksJsonField();
-    }
-
-    function clearLinkRows() {
-      $('linksWrap').innerHTML = '';
-      syncLinksJsonField();
-    }
-
-    function collectLinks() {
-      const rows = Array.from(document.querySelectorAll('#linksWrap .link-row'));
-      return rows.map(function(row) {
-        const label = safeText(row.querySelector('.link-label')?.value);
-        const url = safeText(row.querySelector('.link-url')?.value);
-
-        if (!label || !url) return null;
-
+      return rawList.map(function(a) {
         return {
-          label: label,
-          url: /^https?:\/\//i.test(url) ? url : 'https://' + url
+          id: safeText(a.id, 'ANN-' + Math.random().toString(36).slice(2)),
+          title: safeText(a.title, '未命名公告'),
+          message: safeText(a.message, ''),
+          isPinned: !!a.isPinned,
+          priority: Number(a.priority || 0),
+          updateAt: safeText(a.updateAt, '')
         };
-      }).filter(Boolean);
+      });
     }
 
-    function syncLinksJsonField() {
-      $('linksJson').value = JSON.stringify(collectLinks());
-    }
+    function setStatus(boxId, type, text) {
+      const box = $(boxId);
+      if (!text) {
+        box.textContent = '';
+        return;
+      }
 
-    function resetForm() {
-      $('id').value = '';
-      $('title').value = '';
-      $('start').value = '';
-      $('end').value = '';
-      $('allDay').checked = false;
-      $('eventType').value = '一般活動';
-      $('location').value = '';
-      $('region').value = '';
-      $('description').value = '';
-      $('color').value = '#4a90e2';
-      $('linksJson').value = '[]';
-      clearLinkRows();
-      addLinkRow();
-      setStatus('ok', '已切換為新增模式。');
-    }
-
-    function fillForm(e) {
-      $('id').value = safeText(e.id, '');
-      $('title').value = safeText(e.title, '');
-      $('start').value = toDatetimeLocalString(e.start);
-      $('end').value = toDatetimeLocalString(e.end);
-      $('allDay').checked = !!e.allDay;
-      $('eventType').value = safeText(e.extendedProps && e.extendedProps.eventType, '一般活動');
-      $('location').value = safeText(e.extendedProps && e.extendedProps.location, '');
-      $('region').value = safeText(e.extendedProps && e.extendedProps.region, '');
-      $('description').value = safeText(e.extendedProps && e.extendedProps.description, '');
-      $('color').value = getColor(e);
-
-      clearLinkRows();
-      const links = Array.isArray(e.extendedProps && e.extendedProps.links) ? e.extendedProps.links : [];
-      if (links.length) {
-        links.forEach(function(link) { addLinkRow(link); });
+      if (type === 'ok') {
+        box.innerHTML = '<div class="ok-box">' + safe(text) + '</div>';
+      } else if (type === 'error') {
+        box.innerHTML = '<div class="error-box">' + safe(text) + '</div>';
+      } else if (type === 'warn') {
+        box.innerHTML = '<div class="warn-box">' + safe(text) + '</div>';
       } else {
-        addLinkRow();
+        box.innerHTML = '<div class="loading-box">' + safe(text) + '</div>';
       }
-
-      syncLinksJsonField();
-      setStatus('ok', '已帶入活動資料，可直接修改後儲存。');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function validateForm() {
-      const title = safeText($('title').value);
-      const start = safeText($('start').value);
-
-      if (!safeText(API_URL) || API_URL === 'YOUR_GAS_WEBAPP_URL') {
-        setStatus('error', '尚未設定 API_URL，請先把 admin.html 裡的 YOUR_GAS_WEBAPP_URL 換成你的 Apps Script 網址。');
-        return false;
-      }
-
-      if (!safeText($('password').value)) {
-        setStatus('warn', '請輸入管理密碼。');
-        $('password').focus();
-        return false;
-      }
-
-      if (!title) {
-        setStatus('warn', '請輸入活動名稱。');
-        $('title').focus();
-        return false;
-      }
-
-      if (!start) {
-        setStatus('warn', '請輸入開始時間。');
-        $('start').focus();
-        return false;
-      }
-
-      return true;
     }
 
     function createHiddenForm(data) {
@@ -967,30 +930,148 @@
       return form;
     }
 
-    function submitUpsert() {
-      if (!validateForm()) return;
+    function validateCommon() {
+      if (!safeText(API_URL) || API_URL === 'YOUR_GAS_WEBAPP_URL') {
+        return '尚未設定 API_URL，請先把 admin.html 裡的 YOUR_GAS_WEBAPP_URL 換成你的 Apps Script 網址。';
+      }
 
-      syncLinksJsonField();
+      if (!safeText($('password').value)) {
+        return '請輸入管理密碼。';
+      }
+
+      return '';
+    }
+
+    function addEventLinkRow(data) {
+      const wrap = $('eventLinksWrap');
+      const rowId = 'eventLinkRow_' + (++eventLinkRowSeq);
+
+      const row = document.createElement('div');
+      row.className = 'link-row';
+      row.id = rowId;
+
+      row.innerHTML = `
+        <input type="text" class="event-link-label" placeholder="連結名稱，例如：報名表" value="${safe(data && data.label || '')}">
+        <input type="text" class="event-link-url" placeholder="連結網址，例如：https://example.com" value="${safe(data && data.url || '')}">
+        <button class="btn btn-danger" type="button">刪除</button>
+      `;
+
+      row.querySelector('button').addEventListener('click', function() {
+        row.remove();
+        syncEventLinksJson();
+      });
+
+      row.querySelectorAll('input').forEach(function(input) {
+        input.addEventListener('input', syncEventLinksJson);
+      });
+
+      wrap.appendChild(row);
+      syncEventLinksJson();
+    }
+
+    function clearEventLinkRows() {
+      $('eventLinksWrap').innerHTML = '';
+      syncEventLinksJson();
+    }
+
+    function collectEventLinks() {
+      const rows = Array.from(document.querySelectorAll('#eventLinksWrap .link-row'));
+      return rows.map(function(row) {
+        const label = safeText(row.querySelector('.event-link-label')?.value);
+        const urlRaw = safeText(row.querySelector('.event-link-url')?.value);
+
+        if (!label || !urlRaw) return null;
+
+        const url = /^https?:\/\//i.test(urlRaw) ? urlRaw : 'https://' + urlRaw;
+        return { label: label, url: url };
+      }).filter(Boolean);
+    }
+
+    function syncEventLinksJson() {
+      $('eventLinksJson').value = JSON.stringify(collectEventLinks());
+    }
+
+    function resetEventForm() {
+      $('eventId').value = '';
+      $('eventTitle').value = '';
+      $('eventStart').value = '';
+      $('eventEnd').value = '';
+      $('eventAllDay').checked = false;
+      $('eventType').value = '活動';
+      $('eventRegion').value = '';
+      $('eventLocation').value = '';
+      $('eventDescription').value = '';
+      $('eventColor').value = '#4a90e2';
+      $('eventLinksJson').value = '[]';
+      clearEventLinkRows();
+      addEventLinkRow();
+      setStatus('eventStatusBox', 'ok', '已切換為新增活動模式。');
+    }
+
+    function fillEventForm(e) {
+      $('eventId').value = safeText(e.id, '');
+      $('eventTitle').value = safeText(e.title, '');
+      $('eventStart').value = toDatetimeLocalString(e.start);
+      $('eventEnd').value = toDatetimeLocalString(e.end);
+      $('eventAllDay').checked = !!e.allDay;
+      $('eventType').value = safeText(e.extendedProps && e.extendedProps.eventType, '活動');
+      $('eventRegion').value = safeText(e.extendedProps && e.extendedProps.region, '');
+      $('eventLocation').value = safeText(e.extendedProps && e.extendedProps.location, '');
+      $('eventDescription').value = safeText(e.extendedProps && e.extendedProps.description, '');
+      $('eventColor').value = safeText(e.color, getTypeColor(safeText(e.extendedProps && e.extendedProps.eventType, '活動')));
+
+      clearEventLinkRows();
+      const links = Array.isArray(e.extendedProps && e.extendedProps.links) ? e.extendedProps.links : [];
+      if (links.length) {
+        links.forEach(function(link) { addEventLinkRow(link); });
+      } else {
+        addEventLinkRow();
+      }
+
+      syncEventLinksJson();
+      setStatus('eventStatusBox', 'ok', '已帶入活動資料，可直接修改後儲存。');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function validateEventForm() {
+      const commonErr = validateCommon();
+      if (commonErr) return commonErr;
+
+      if (!safeText($('eventTitle').value)) return '請輸入活動名稱。';
+      if (!safeText($('eventStart').value)) return '請輸入開始時間。';
+
+      return '';
+    }
+
+    function submitEventUpsert() {
+      const err = validateEventForm();
+      if (err) {
+        setStatus('eventStatusBox', 'warn', err);
+        return;
+      }
+
+      syncEventLinksJson();
 
       const data = {
-        action: 'upsert',
+        action: 'upsert_event',
         password: safeText($('password').value),
-        id: safeText($('id').value),
-        title: safeText($('title').value),
-        start: safeText($('start').value),
-        end: safeText($('end').value),
-        allDay: $('allDay').checked ? 'true' : 'false',
-        eventType: safeText($('eventType').value, '一般活動'),
-        location: safeText($('location').value),
-        region: safeText($('region').value),
-        description: safeText($('description').value),
-        color: safeText($('color').value, '#4a90e2'),
-        linksJson: safeText($('linksJson').value, '[]')
+        id: safeText($('eventId').value),
+        title: safeText($('eventTitle').value),
+        start: safeText($('eventStart').value),
+        end: safeText($('eventEnd').value),
+        allDay: $('eventAllDay').checked ? 'true' : 'false',
+        location: safeText($('eventLocation').value),
+        description: safeText($('eventDescription').value),
+        color: safeText($('eventColor').value),
+        linksJson: safeText($('eventLinksJson').value, '[]'),
+        region: safeText($('eventRegion').value),
+        eventType: safeText($('eventType').value, '活動')
       };
 
       const form = createHiddenForm(data);
-      pendingAction = data.id ? 'update' : 'create';
-      setStatus('loading', '資料送出中，請稍候...');
+      const isUpdate = !!data.id;
+
+      setStatus('eventStatusBox', 'loading', '活動資料送出中，請稍候...');
 
       form.submit();
 
@@ -1001,47 +1082,36 @@
       setTimeout(async function() {
         try {
           await loadEvents();
-          setStatus('ok', pendingAction === 'update' ? '活動已更新。' : '活動已新增。');
-          if (pendingAction !== 'update') {
-            resetForm();
-          }
-        } catch (err) {
-          setStatus('error', '送出後重新讀取失敗，請按重新整理再確認。');
+          setStatus('eventStatusBox', 'ok', isUpdate ? '活動已更新。' : '活動已新增。');
+          if (!isUpdate) resetEventForm();
+        } catch (e) {
+          setStatus('eventStatusBox', 'error', '送出後重新讀取活動失敗，請按全部重新整理。');
         }
       }, 1500);
     }
 
-    function submitDelete() {
-      const id = safeText($('id').value);
-
-      if (!safeText(API_URL) || API_URL === 'YOUR_GAS_WEBAPP_URL') {
-        setStatus('error', '尚未設定 API_URL。');
+    function submitEventDelete() {
+      const commonErr = validateCommon();
+      if (commonErr) {
+        setStatus('eventStatusBox', 'warn', commonErr);
         return;
       }
 
-      if (!safeText($('password').value)) {
-        setStatus('warn', '請輸入管理密碼。');
-        $('password').focus();
-        return;
-      }
-
+      const id = safeText($('eventId').value);
       if (!id) {
-        setStatus('warn', '請先從清單點選一筆活動，再執行刪除。');
+        setStatus('eventStatusBox', 'warn', '請先從活動清單選擇一筆活動。');
         return;
       }
 
-      const ok = confirm('確定要刪除這筆活動嗎？刪除後無法復原。');
-      if (!ok) return;
+      if (!confirm('確定要刪除這筆活動嗎？刪除後無法復原。')) return;
 
       const form = createHiddenForm({
-        action: 'delete',
+        action: 'delete_event',
         password: safeText($('password').value),
         id: id
       });
 
-      pendingAction = 'delete';
-      setStatus('loading', '刪除中，請稍候...');
-
+      setStatus('eventStatusBox', 'loading', '活動刪除中，請稍候...');
       form.submit();
 
       setTimeout(function() {
@@ -1051,45 +1121,152 @@
       setTimeout(async function() {
         try {
           await loadEvents();
-          resetForm();
-          setStatus('ok', '活動已刪除。');
-        } catch (err) {
-          setStatus('error', '刪除後重新讀取失敗，請按重新整理再確認。');
+          resetEventForm();
+          setStatus('eventStatusBox', 'ok', '活動已刪除。');
+        } catch (e) {
+          setStatus('eventStatusBox', 'error', '刪除後重新讀取活動失敗，請按全部重新整理。');
         }
       }, 1500);
     }
 
-    function renderList(events) {
+    function resetNoticeForm() {
+      $('noticeId').value = '';
+      $('noticeTitle').value = '';
+      $('noticeMessage').value = '';
+      $('noticePinned').checked = true;
+      $('noticePriority').value = '50';
+      setStatus('noticeStatusBox', 'ok', '已切換為新增公告模式。');
+    }
+
+    function fillNoticeForm(n) {
+      $('noticeId').value = safeText(n.id, '');
+      $('noticeTitle').value = safeText(n.title, '');
+      $('noticeMessage').value = safeText(n.message, '');
+      $('noticePinned').checked = !!n.isPinned;
+      $('noticePriority').value = String(Number(n.priority || 0));
+      setStatus('noticeStatusBox', 'ok', '已帶入公告資料，可直接修改後儲存。');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function validateNoticeForm() {
+      const commonErr = validateCommon();
+      if (commonErr) return commonErr;
+
+      if (!safeText($('noticeTitle').value)) return '請輸入公告標題。';
+      if (!safeText($('noticeMessage').value)) return '請輸入公告內容。';
+
+      return '';
+    }
+
+    function submitNoticeUpsert() {
+      const err = validateNoticeForm();
+      if (err) {
+        setStatus('noticeStatusBox', 'warn', err);
+        return;
+      }
+
+      const data = {
+        action: 'upsert_announcement',
+        password: safeText($('password').value),
+        id: safeText($('noticeId').value),
+        title: safeText($('noticeTitle').value),
+        message: safeText($('noticeMessage').value),
+        isPinned: $('noticePinned').checked ? 'true' : 'false',
+        priority: safeText($('noticePriority').value, '0')
+      };
+
+      const form = createHiddenForm(data);
+      const isUpdate = !!data.id;
+
+      setStatus('noticeStatusBox', 'loading', '公告資料送出中，請稍候...');
+      form.submit();
+
+      setTimeout(function() {
+        if (form.parentNode) form.parentNode.removeChild(form);
+      }, 1200);
+
+      setTimeout(async function() {
+        try {
+          await loadAnnouncements();
+          setStatus('noticeStatusBox', 'ok', isUpdate ? '公告已更新。' : '公告已新增。');
+          if (!isUpdate) resetNoticeForm();
+        } catch (e) {
+          setStatus('noticeStatusBox', 'error', '送出後重新讀取公告失敗，請按全部重新整理。');
+        }
+      }, 1500);
+    }
+
+    function submitNoticeDelete() {
+      const commonErr = validateCommon();
+      if (commonErr) {
+        setStatus('noticeStatusBox', 'warn', commonErr);
+        return;
+      }
+
+      const id = safeText($('noticeId').value);
+      if (!id) {
+        setStatus('noticeStatusBox', 'warn', '請先從公告清單選擇一筆公告。');
+        return;
+      }
+
+      if (!confirm('確定要刪除這筆公告嗎？刪除後無法復原。')) return;
+
+      const form = createHiddenForm({
+        action: 'delete_announcement',
+        password: safeText($('password').value),
+        id: id
+      });
+
+      setStatus('noticeStatusBox', 'loading', '公告刪除中，請稍候...');
+      form.submit();
+
+      setTimeout(function() {
+        if (form.parentNode) form.parentNode.removeChild(form);
+      }, 1200);
+
+      setTimeout(async function() {
+        try {
+          await loadAnnouncements();
+          resetNoticeForm();
+          setStatus('noticeStatusBox', 'ok', '公告已刪除。');
+        } catch (e) {
+          setStatus('noticeStatusBox', 'error', '刪除後重新讀取公告失敗，請按全部重新整理。');
+        }
+      }, 1500);
+    }
+
+    function renderEventList(events) {
       const list = $('eventList');
 
       if (!Array.isArray(events) || !events.length) {
         list.innerHTML = '<div class="loading-box">目前沒有活動資料。</div>';
-        $('countBadge').textContent = '共 0 筆';
+        $('eventCountBadge').textContent = '共 0 筆';
         return;
       }
 
-      $('countBadge').textContent = '共 ' + events.length + ' 筆';
+      $('eventCountBadge').textContent = '共 ' + events.length + ' 筆';
 
       list.innerHTML = events.map(function(e) {
         const location = safeText(e.extendedProps && e.extendedProps.location, '未填地點');
         const region = safeText(e.extendedProps && e.extendedProps.region, '未分類');
         const desc = safeText(e.extendedProps && e.extendedProps.description, '未填說明');
         const updateAt = safeText(e.extendedProps && e.extendedProps.updateAt, '未更新');
-        const eventType = safeText(e.extendedProps && e.extendedProps.eventType, '一般活動');
+        const eventType = safeText(e.extendedProps && e.extendedProps.eventType, '活動');
         const links = Array.isArray(e.extendedProps && e.extendedProps.links) ? e.extendedProps.links : [];
-        const color = safe(getColor(e));
+        const color = safeText(e.color, getTypeColor(eventType));
+        const typeClass = eventType === '會議' ? 'tag-purple' : (eventType === '現勘' ? 'tag-orange' : 'tag-blue');
 
         return (
           '<div class="item">' +
             '<div class="item-top">' +
               '<div class="item-main">' +
-                '<div class="dot" style="background:' + color + ';"></div>' +
+                '<div class="dot" style="background:' + safe(color) + ';"></div>' +
                 '<div>' +
                   '<div class="item-title">' + safe(e.title) + '</div>' +
                   '<div class="item-tags">' +
-                    '<span class="tag tag-blue">' + safe(region) + '</span>' +
-                    '<span class="tag tag-purple">' + safe(eventType) + '</span>' +
-                    '<span class="tag ' + (e.allDay ? 'tag-orange' : 'tag-green') + '">' + (e.allDay ? '全天活動' : '一般活動') + '</span>' +
+                    '<span class="tag tag-gray">' + safe(region) + '</span>' +
+                    '<span class="tag ' + typeClass + '">' + safe(eventType) + '</span>' +
+                    '<span class="tag tag-green">' + (e.allDay ? '全天' : '一般時段') + '</span>' +
                     '<span class="tag tag-gray">連結 ' + links.length + ' 筆</span>' +
                   '</div>' +
                 '</div>' +
@@ -1102,24 +1279,69 @@
               '最後更新：' + safe(updateAt) +
             '</div>' +
             '<div class="item-actions">' +
-              '<button class="btn btn-primary" type="button" data-edit="' + safe(e.id) + '">編輯</button>' +
+              '<button class="btn btn-primary" type="button" data-edit-event="' + safe(e.id) + '">編輯活動</button>' +
             '</div>' +
           '</div>'
         );
       }).join('');
 
-      list.querySelectorAll('[data-edit]').forEach(function(btn) {
+      list.querySelectorAll('[data-edit-event]').forEach(function(btn) {
         btn.addEventListener('click', function() {
-          const id = btn.getAttribute('data-edit');
+          const id = btn.getAttribute('data-edit-event');
           const found = allEvents.find(function(x) { return String(x.id) === String(id); });
-          if (found) fillForm(found);
+          if (found) fillEventForm(found);
+        });
+      });
+    }
+
+    function renderNoticeList(notices) {
+      const list = $('noticeList');
+
+      if (!Array.isArray(notices) || !notices.length) {
+        list.innerHTML = '<div class="loading-box">目前沒有公告資料。</div>';
+        $('noticeCountBadge').textContent = '共 0 筆';
+        return;
+      }
+
+      $('noticeCountBadge').textContent = '共 ' + notices.length + ' 筆';
+
+      list.innerHTML = notices.map(function(n) {
+        return (
+          '<div class="item">' +
+            '<div class="item-top">' +
+              '<div class="item-main">' +
+                '<div class="dot" style="background:#d89218;"></div>' +
+                '<div>' +
+                  '<div class="item-title">' + safe(n.title) + '</div>' +
+                  '<div class="item-tags">' +
+                    (n.isPinned ? '<span class="tag tag-orange">置頂</span>' : '<span class="tag tag-gray">一般</span>') +
+                    '<span class="tag tag-red">Priority ' + safe(n.priority) + '</span>' +
+                  '</div>' +
+                '</div>' +
+              '</div>' +
+            '</div>' +
+            '<div class="item-meta">' +
+              safe(n.message) + '\n' +
+              '最後更新：' + safe(n.updateAt || '未更新') +
+            '</div>' +
+            '<div class="item-actions">' +
+              '<button class="btn btn-primary" type="button" data-edit-notice="' + safe(n.id) + '">編輯公告</button>' +
+            '</div>' +
+          '</div>'
+        );
+      }).join('');
+
+      list.querySelectorAll('[data-edit-notice]').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          const id = btn.getAttribute('data-edit-notice');
+          const found = allAnnouncements.find(function(x) { return String(x.id) === String(id); });
+          if (found) fillNoticeForm(found);
         });
       });
     }
 
     function getFilteredEvents() {
-      const keyword = safeText($('searchInput').value).toLowerCase();
-
+      const keyword = safeText($('eventSearchInput').value).toLowerCase();
       if (!keyword) return allEvents.slice();
 
       return allEvents.filter(function(e) {
@@ -1139,13 +1361,24 @@
       });
     }
 
-    async function loadEvents() {
-      setStatus('loading', '活動資料讀取中...');
+    function getFilteredNotices() {
+      const keyword = safeText($('noticeSearchInput').value).toLowerCase();
+      if (!keyword) return allAnnouncements.slice();
 
-      const data = await jsonp(API_URL + '?action=list');
+      return allAnnouncements.filter(function(n) {
+        const title = safeText(n.title).toLowerCase();
+        const message = safeText(n.message).toLowerCase();
+        return title.includes(keyword) || message.includes(keyword);
+      });
+    }
+
+    async function loadEvents() {
+      setStatus('eventStatusBox', 'loading', '活動資料讀取中...');
+
+      const data = await jsonp(API_URL + '?action=list_events');
 
       if (!data || !data.ok) {
-        throw new Error((data && data.message) ? data.message : 'API 回傳失敗');
+        throw new Error((data && data.message) ? data.message : '活動 API 回傳失敗');
       }
 
       allEvents = normalizeEvents(data.events || []);
@@ -1155,29 +1388,71 @@
         return ta - tb;
       });
 
-      renderList(getFilteredEvents());
-      setStatus('ok', '活動資料已載入。');
+      renderEventList(getFilteredEvents());
+      setStatus('eventStatusBox', 'ok', '活動資料已載入。');
+    }
+
+    async function loadAnnouncements() {
+      setStatus('noticeStatusBox', 'loading', '公告資料讀取中...');
+
+      const data = await jsonp(API_URL + '?action=list_announcements');
+
+      if (!data || !data.ok) {
+        throw new Error((data && data.message) ? data.message : '公告 API 回傳失敗');
+      }
+
+      allAnnouncements = normalizeAnnouncements(data.announcements || []);
+      allAnnouncements.sort(function(a, b) {
+        if (a.isPinned !== b.isPinned) return a.isPinned ? -1 : 1;
+        if (a.priority !== b.priority) return b.priority - a.priority;
+        return 0;
+      });
+
+      renderNoticeList(getFilteredNotices());
+      setStatus('noticeStatusBox', 'ok', '公告資料已載入。');
+    }
+
+    async function reloadAll() {
+      await Promise.all([loadEvents(), loadAnnouncements()]);
     }
 
     function bindEvents() {
-      $('btnReset').addEventListener('click', resetForm);
-      $('btnReload').addEventListener('click', function() {
-        loadEvents().catch(function(err) {
-          setStatus('error', err && err.message ? err.message : '重新整理失敗');
+      $('btnAddLink').addEventListener('click', function() {
+        addEventLinkRow();
+      });
+
+      $('btnSaveEvent').addEventListener('click', submitEventUpsert);
+      $('btnDeleteEvent').addEventListener('click', submitEventDelete);
+      $('btnResetEvent').addEventListener('click', resetEventForm);
+
+      $('btnSaveNotice').addEventListener('click', submitNoticeUpsert);
+      $('btnDeleteNotice').addEventListener('click', submitNoticeDelete);
+      $('btnResetNotice').addEventListener('click', resetNoticeForm);
+
+      $('btnReloadAll').addEventListener('click', function() {
+        reloadAll().catch(function(err) {
+          setStatus('eventStatusBox', 'error', err && err.message ? err.message : '重新整理失敗');
+          setStatus('noticeStatusBox', 'error', err && err.message ? err.message : '重新整理失敗');
         });
       });
-      $('btnSave').addEventListener('click', submitUpsert);
-      $('btnDelete').addEventListener('click', submitDelete);
-      $('btnAddLink').addEventListener('click', function() { addLinkRow(); });
 
-      $('searchInput').addEventListener('input', function() {
-        renderList(getFilteredEvents());
+      $('eventSearchInput').addEventListener('input', function() {
+        renderEventList(getFilteredEvents());
       });
 
-      $('allDay').addEventListener('change', function() {
-        if ($('allDay').checked && $('start').value && !$('end').value) {
-          $('end').value = $('start').value;
+      $('noticeSearchInput').addEventListener('input', function() {
+        renderNoticeList(getFilteredNotices());
+      });
+
+      $('eventAllDay').addEventListener('change', function() {
+        if ($('eventAllDay').checked && $('eventStart').value && !$('eventEnd').value) {
+          $('eventEnd').value = $('eventStart').value;
         }
+      });
+
+      $('eventType').addEventListener('change', function() {
+        const type = safeText($('eventType').value, '活動');
+        $('eventColor').value = getTypeColor(type);
       });
     }
 
@@ -1188,12 +1463,15 @@
         }
 
         bindEvents();
-        resetForm();
-        await loadEvents();
+        resetEventForm();
+        resetNoticeForm();
+        await reloadAll();
       } catch (err) {
         console.error(err);
-        setStatus('error', err && err.message ? err.message : '系統初始化失敗');
+        setStatus('eventStatusBox', 'error', err && err.message ? err.message : '活動系統初始化失敗');
+        setStatus('noticeStatusBox', 'error', err && err.message ? err.message : '公告系統初始化失敗');
         $('eventList').innerHTML = '<div class="error-box">無法載入活動資料，請確認 Apps Script 是否已部署、API_URL 是否正確、Web App 權限是否為任何人。</div>';
+        $('noticeList').innerHTML = '<div class="error-box">無法載入公告資料，請確認 Apps Script 是否已部署、API_URL 是否正確、Web App 權限是否為任何人。</div>';
       }
     }
 
