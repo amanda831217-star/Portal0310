@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>活動日曆</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/locales-all.global.min.js"></script>
+
+  <style>
+    :root{
+      --bg:#07111f;
+      --bg2:#0b1830;
+      --card:rgba(10,22,45,.72);
+      --line:rgba(90,170,255,.20);
+      --text:#eaf4ff;
+      --muted:#8ea7c2;
+      --glow:#4cc9ff;
+      --glow2:#6f8cff;
+    }
+
+    *{box-sizing:border-box}
+
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(76,201,255,.18), transparent 24%),
+        radial-gradient(circle at top right, rgba(111,140,255,.14), transparent 24%),
+        linear-gradient(180deg, #030816 0%, #081427 100%);
+      min-height:100vh;
+    }
+
+    .wrap{
+      max-width:1400px;
+      margin:0 auto;
+      padding:18px;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:16px;
+      padding:16px 18px;
+      border:1px solid var(--line);
+      border-radius:20px;
+      background:linear-gradient(180deg, rgba(11,24,48,.9), rgba(8,18,36,.78));
+      box-shadow:0 0 0 1px rgba(255,255,255,.02) inset, 0 0 28px rgba(76,201,255,.10);
+      backdrop-filter:blur(16px);
+    }
+
+    .brand{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+
+    .brand .t1{
+      font-size:14px;
+      color:#81e6ff;
+      letter-spacing:2px;
+      text-transform:uppercase;
+    }
+
+    .brand .t2{
+      font-size:28px;
+      font-weight:800;
+      letter-spacing:1px;
+    }
+
+    .btn{
+      appearance:none;
+      border:1px solid rgba(76,201,255,.28);
+      background:rgba(7,18,38,.72);
+      color:var(--text);
+      border-radius:14px;
+      padding:12px 16px;
+      cursor:pointer;
+      font-size:14px;
+      font-weight:700;
+      text-decoration:none;
+      box-shadow:0 0 20px rgba(76,201,255,.08);
+    }
+
+    .btn:hover{
+      box-shadow:0 0 24px rgba(76,201,255,.18);
+      border-color:rgba(76,201,255,.45);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.35fr .65fr;
+      gap:16px;
+    }
+
+    .panel{
+      border:1px solid var(--line);
+      border-radius:22px;
+      background:linear-gradient(180deg, rgba(10,22,45,.88), rgba(7,16,32,.80));
+      box-shadow:0 0 26px rgba(76,201,255,.08);
+      backdrop-filter:blur(14px);
+      overflow:hidden;
+    }
+
+    .panel-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:8px;
+      padding:16px 18px;
+      border-bottom:1px solid rgba(76,201,255,.10);
+    }
+
+    .panel-title{
+      font-size:18px;
+      font-weight:800;
+    }
+
+    .calendar-box{
+      padding:16px;
+    }
+
+    #calendar{
+      min-height:760px;
+    }
+
+    .side{
+      display:flex;
+      flex-direction:column;
+      gap:16px;
+    }
+
+    .event-detail{
+      padding:18px;
+      min-height:260px;
+    }
+
+    .empty{
+      color:var(--muted);
+      font-size:15px;
+      line-height:1.8;
+    }
+
+    .event-title{
+      font-size:28px;
+      font-weight:900;
+      line-height:1.3;
+      margin-bottom:14px;
+      color:#ffffff;
+      text-shadow:0 0 14px rgba(76,201,255,.14);
+    }
+
+    .meta{
+      display:grid;
+      gap:10px;
+      margin-bottom:16px;
+    }
+
+    .meta-item{
+      border:1px solid rgba(76,201,255,.10);
+      background:rgba(255,255,255,.02);
+      border-radius:14px;
+      padding:12px 14px;
+    }
+
+    .meta-label{
+      color:#7ecff8;
+      font-size:12px;
+      letter-spacing:1px;
+      margin-bottom:6px;
+    }
+
+    .meta-value{
+      color:var(--text);
+      font-size:16px;
+      font-weight:700;
+      line-height:1.6;
+      word-break:break-word;
+    }
+
+    .list-box{
+      padding:18px;
+    }
+
+    .list{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .list-item{
+      border:1px solid rgba(76,201,255,.14);
+      border-radius:16px;
+      padding:14px;
+      background:rgba(255,255,255,.02);
+      cursor:pointer;
+      transition:.2s ease;
+    }
+
+    .list-item:hover{
+      transform:translateY(-1px);
+      box-shadow:0 0 18px rgba(76,201,255,.10);
+      border-color:rgba(76,201,255,.30);
+    }
+
+    .list-title{
+      font-size:18px;
+      font-weight:900;
+      margin-bottom:8px;
+      line-height:1.4;
+    }
+
+    .list-meta{
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.6;
+    }
+
+    .status{
+      padding:14px 18px;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .fc{
+      --fc-border-color: rgba(76,201,255,.12);
+      --fc-page-bg-color: transparent;
+      --fc-neutral-bg-color: rgba(255,255,255,.02);
+      --fc-list-event-hover-bg-color: rgba(76,201,255,.06);
+      --fc-today-bg-color: rgba(76,201,255,.08);
+      --fc-event-border-color: transparent;
+      --fc-button-bg-color: #0d2345;
+      --fc-button-border-color: rgba(76,201,255,.22);
+      --fc-button-hover-bg-color: #13315e;
+      --fc-button-hover-border-color: rgba(76,201,255,.38);
+      --fc-button-active-bg-color: #163a70;
+      --fc-button-active-border-color: rgba(76,201,255,.42);
+      --fc-event-bg-color: #2f7cff;
+      --fc-event-text-color: #fff;
+      --fc-small-font-size: .88em;
+    }
+
+    .fc .fc-toolbar-title{
+      font-size:28px;
+      font-weight:900;
+      color:#fff;
+      letter-spacing:1px;
+    }
+
+    .fc .fc-col-header-cell-cushion{
+      padding:12px 4px;
+      color:#8bdcff;
+      font-size:14px;
+      font-weight:800;
+    }
+
+    .fc .fc-daygrid-day-number{
+      color:#dcecff;
+      font-size:16px;
+      font-weight:800;
+      padding:10px;
+    }
+
+    .fc .fc-daygrid-event{
+      border-radius:12px;
+      padding:4px 6px;
+      margin-top:4px;
+      box-shadow:0 0 18px rgba(76,201,255,.16);
+    }
+
+    .fc .fc-event-title{
+      font-size:14px;
+      font-weight:900;
+      line-height:1.35;
+      white-space:normal;
+    }
+
+    .fc .fc-daygrid-more-link{
+      color:#8bdcff;
+      font-weight:800;
+    }
+
+    .fc-theme-standard td,
+    .fc-theme-standard th{
+      border-color:rgba(76,201,255,.12);
+    }
+
+    @media (max-width: 1100px){
+      .grid{
+        grid-template-columns:1fr;
+      }
+
+      #calendar{
+        min-height:640px;
+      }
+    }
+
+    @media (max-width: 680px){
+      .topbar{
+        flex-direction:column;
+        align-items:flex-start;
+      }
+
+      .brand .t2{
+        font-size:22px;
+      }
+
+      .fc .fc-toolbar{
+        flex-direction:column;
+        gap:10px;
+      }
+
+      .fc .fc-toolbar-title{
+        font-size:22px;
+      }
+
+      .event-title{
+        font-size:22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <div class="t1">Engineering Event Center</div>
+        <div class="t2">活動日曆</div>
+      </div>
+      <a class="btn" href="./admin.html">後台管理</a>
+    </div>
+
+    <div class="grid">
+      <div class="panel">
+        <div class="panel-head">
+          <div class="panel-title">Calendar</div>
+        </div>
+        <div class="calendar-box">
+          <div id="calendar"></div>
+        </div>
+        <div class="status" id="status">Loading...</div>
+      </div>
+
+      <div class="side">
+        <div class="panel">
+          <div class="panel-head">
+            <div class="panel-title">活動內容</div>
+          </div>
+          <div class="event-detail" id="detail">
+            <div class="empty">請點選日期或活動</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <div class="panel-title">近期活動</div>
+          </div>
+          <div class="list-box">
+            <div class="list" id="upcomingList"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = 'YOUR_GAS_WEBAPP_URL';
+    let calendar;
+    let allEvents = [];
+
+    function jsonp(url) {
+      return new Promise((resolve, reject) => {
+        const cb = 'jsonp_cb_' + Date.now() + '_' + Math.floor(Math.random() * 100000);
+        window[cb] = function(data) {
+          resolve(data);
+          script.remove();
+          delete window[cb];
+        };
+        const script = document.createElement('script');
+        script.src = url + (url.includes('?') ? '&' : '?') + 'callback=' + cb;
+        script.onerror = function() {
+          reject(new Error('JSONP load error'));
+          script.remove();
+          delete window[cb];
+        };
+        document.body.appendChild(script);
+      });
+    }
+
+    function safe(v) {
+      return String(v || '').replace(/[&<>"']/g, s => ({
+        '&':'&amp;',
+        '<':'&lt;',
+        '>':'&gt;',
+        '"':'&quot;',
+        "'":'&#39;'
+      }[s]));
+    }
+
+    function fmtDate(v, allDay) {
+      if (!v) return '';
+      const d = new Date(v);
+      if (isNaN(d)) return String(v);
+
+      if (allDay) {
+        return d.toLocaleDateString('zh-TW', {
+          year:'numeric',
+          month:'2-digit',
+          day:'2-digit',
+          weekday:'short'
+        });
+      }
+
+      return d.toLocaleString('zh-TW', {
+        year:'numeric',
+        month:'2-digit',
+        day:'2-digit',
+        hour:'2-digit',
+        minute:'2-digit',
+        hour12:false
+      });
+    }
+
+    function showDetail(eventObj) {
+      const p = eventObj.extendedProps || {};
+
+      document.getElementById('detail').innerHTML = `
+        <div class="event-title">${safe(eventObj.title || '')}</div>
+        <div class="meta">
+          <div class="meta-item">
+            <div class="meta-label">開始</div>
+            <div class="meta-value">${safe(fmtDate(eventObj.start, eventObj.allDay))}</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">結束</div>
+            <div class="meta-value">${safe(eventObj.end ? fmtDate(eventObj.end, eventObj.allDay) : '')}</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">地點</div>
+            <div class="meta-value">${safe(p.location || '')}</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">內容</div>
+            <div class="meta-value">${safe(p.description || '')}</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">更新時間</div>
+            <div class="meta-value">${safe(p.updateAt || '')}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderUpcoming(events) {
+      const now = new Date();
+
+      const sorted = [...events]
+        .filter(e => {
+          const s = new Date(e.start);
+          return !isNaN(s) && s >= new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
+        })
+        .sort((a, b) => new Date(a.start) - new Date(b.start))
+        .slice(0, 8);
+
+      const box = document.getElementById('upcomingList');
+
+      if (!sorted.length) {
+        box.innerHTML = '<div class="empty">目前沒有活動</div>';
+        return;
+      }
+
+      box.innerHTML = sorted.map(e => `
+        <div class="list-item" data-id="${safe(e.id)}">
+          <div class="list-title">${safe(e.title)}</div>
+          <div class="list-meta">
+            ${safe(fmtDate(e.start, e.allDay))}<br>
+            ${safe((e.extendedProps && e.extendedProps.location) || '')}
+          </div>
+        </div>
+      `).join('');
+
+      box.querySelectorAll('.list-item').forEach(el => {
+        el.addEventListener('click', () => {
+          const id = el.dataset.id;
+          const fcEvent = calendar.getEventById(id);
+          if (fcEvent) {
+            showDetail(fcEvent);
+            calendar.gotoDate(fcEvent.start);
+          }
+        });
+      });
+    }
+
+    async function loadEvents() {
+      document.getElementById('status').textContent = 'Loading...';
+
+      const data = await jsonp(API_URL + '?action=list');
+
+      if (!data.ok) {
+        document.getElementById('status').textContent = 'Load failed';
+        return [];
+      }
+
+      allEvents = data.events || [];
+      document.getElementById('status').textContent = `Events: ${allEvents.length}`;
+      renderUpcoming(allEvents);
+      return allEvents;
+    }
+
+    async function initCalendar() {
+      const events = await loadEvents();
+
+      const calendarEl = document.getElementById('calendar');
+
+      calendar = new FullCalendar.Calendar(calendarEl, {
+        locale: 'zh-tw',
+        initialView: window.innerWidth < 768 ? 'listMonth' : 'dayGridMonth',
+        height: 'auto',
+        headerToolbar: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,timeGridWeek,listMonth'
+        },
+        buttonText: {
+          today: '今天',
+          month: '月',
+          week: '週',
+          list: '列表'
+        },
+        dayMaxEvents: 3,
+        navLinks: true,
+        events: events,
+        eventClick(info) {
+          info.jsEvent.preventDefault();
+          showDetail(info.event);
+        },
+        dateClick(info) {
+          const eventsOnDate = calendar.getEvents().filter(e => {
+            const s = new Date(e.start);
+            return s.getFullYear() === info.date.getFullYear()
+              && s.getMonth() === info.date.getMonth()
+              && s.getDate() === info.date.getDate();
+          });
+
+          if (eventsOnDate.length) {
+            showDetail(eventsOnDate[0]);
+          } else {
+            document.getElementById('detail').innerHTML = '<div class="empty">當日無活動</div>';
+          }
+        }
+      });
+
+      calendar.render();
+
+      if (events.length) {
+        const first = calendar.getEvents()[0];
+        if (first) showDetail(first);
+      }
+    }
+
+    initCalendar();
+  </script>
+</body>
+</html>
